@@ -31,12 +31,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Calendar(
-    modifier: Modifier = Modifier,
-    datePickerState: DatePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = LocalDate.now().atStartOfDay().toInstant(java.time.ZoneOffset.UTC).toEpochMilli()
-    )
-){
+fun Calendar(modifier: Modifier = Modifier,datePickerState: DatePickerState){
 
 
     val nextMonth = {

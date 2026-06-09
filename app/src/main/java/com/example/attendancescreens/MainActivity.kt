@@ -16,9 +16,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.automirrored.filled.Logout
@@ -325,7 +325,7 @@ fun CalendarScreen(
         AttendanceHistoryData("25", "Wed", "09:00 am", "18:00", "08:00", false),
         AttendanceHistoryData("24", "Tue", "09:00 am", "18:00", "08:00", false)
     )
-    val locale = LocalLocale.current.platformLocale
+    val locale = LocalConfiguration.current.locales[0]
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -334,8 +334,7 @@ fun CalendarScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 10.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(horizontal = 10.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -356,25 +355,30 @@ fun CalendarScreen(
             )
 
             val currentDate = datePickerState.getSelectedDate()
+            
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                item {
+                    Calendar(datePickerState = datePickerState)
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
-            Calendar(datePickerState = datePickerState)
-            Spacer(modifier = Modifier.height(16.dp))
-
-            val date: String = currentDate?.dayOfMonth?.toString() ?: "--"
-            val day: String = datePickerState.selectedDateMillis?.let {
-                SimpleDateFormat("EEE", locale).format(Date(it))
-            } ?: "--"
-
-            historyItems.forEach { item: AttendanceHistoryData ->
-                HistoryItem(
-                    date = date,
-                    day = day,
-                    checkIn = item.checkIn,
-                    checkOut = item.checkOut,
-                    totalHrs = item.totalHrs,
-                    location = "NLS Tech Solutions Limited, Saachi Plaza",
-                    isMainColor = item.isMainColor
-                )
+                val date: String = currentDate?.dayOfMonth.toString()
+                val day : String = SimpleDateFormat("EEE",locale ).format(datePickerState.selectedDateMillis)
+                
+                items(historyItems) { item: AttendanceHistoryData ->
+                    HistoryItem(
+                        date = date,
+                        day = day,
+                        checkIn = item.checkIn,
+                        checkOut = item.checkOut,
+                        totalHrs = item.totalHrs,
+                        location = "NLS Tech Solutions Limited, Saachi Plaza",
+                        isMainColor = item.isMainColor
+                    )
+                }
             }
         }
     }
