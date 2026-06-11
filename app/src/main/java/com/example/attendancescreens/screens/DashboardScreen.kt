@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.attendancescreens.components.StatusItem
+import com.example.attendancescreens.model.StatusData
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppLightGray
 import com.example.attendancescreens.ui.theme.AppTextGray
@@ -69,6 +70,24 @@ fun DashboardScreen(
             "--:--"
         }
     val currentDate = SimpleDateFormat("MMMM dd, yyyy - EEEE", locale).format(Date())
+
+    val statusItems = listOf(
+        StatusData(
+            icon = Icons.AutoMirrored.Filled.Login,
+            time = checkInTime,
+            label = "Check In"
+        ),
+        StatusData(
+            icon = Icons.AutoMirrored.Filled.Logout,
+            time = checkOutTime,
+            label = "Check Out"
+        ),
+        StatusData(
+            icon = Icons.Default.History,
+            time = totalHours,
+            label = "Total Hrs"
+        )
+    )
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -143,20 +162,13 @@ fun DashboardScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                StatusItem(
-                    icon = Icons.AutoMirrored.Filled.Login,
-                    time = checkInTime,
-                    label = "Check In"
-                )
-                StatusItem(
-                    icon = Icons.AutoMirrored.Filled.Logout,
-                    time = checkOutTime,
-                    label = "Check Out")
-                StatusItem(
-                    icon = Icons.Default.History,
-                    time = totalHours,
-                    label = "Total Hrs"
-                )
+                statusItems.forEach { item ->
+                    StatusItem(
+                        icon = item.icon,
+                        time = item.time,
+                        label = item.label
+                    )
+                }
             }
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
