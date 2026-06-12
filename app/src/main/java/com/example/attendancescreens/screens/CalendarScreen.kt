@@ -40,6 +40,7 @@ fun CalendarScreen(
         AttendanceHistoryData("25", "Wed", "09:00 am", "18:00", "08:00", false),
         AttendanceHistoryData("24", "Tue", "09:00 am", "18:00", "08:00", false)
     )
+
     val locale = LocalConfiguration.current.locales[0]
 
     Surface(
@@ -81,7 +82,7 @@ fun CalendarScreen(
                 }
 
                 val date: String = currentDate?.dayOfMonth.toString()
-                val day : String = SimpleDateFormat("EEE",locale ).format(datePickerState.selectedDateMillis)
+                val day : String = SimpleDateFormat("EEE", locale).format(datePickerState.selectedDateMillis)
 
                 items(historyItems) { item: AttendanceHistoryData ->
                     HistoryItem(

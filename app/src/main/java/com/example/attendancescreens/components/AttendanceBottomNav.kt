@@ -52,24 +52,22 @@ fun AttendanceBottomNav(
     onItemSelected: (AttendanceNavigationItem) -> Unit = {}
 ) {
 
-    BottomAppBar(
-        containerColor = MaterialTheme.colorScheme.background,
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .clip(RoundedCornerShape(40.dp)),
+        color = AppDarkGreen,
+        contentColor = Color.White
     ) {
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(40.dp)),
-            color = AppDarkGreen,
-            contentColor = Color.White
-        ) {
 
-            NavigationBar(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                containerColor = Color.Transparent,
-                contentColor = White,
-                windowInsets = WindowInsets(10.dp, 4.dp, 10.dp, 0.dp)
-            ) {
+        NavigationBar(
+            modifier = Modifier
+                .fillMaxWidth(),
+            containerColor = Color.Transparent,
+            contentColor = White,
+            windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp)
+        ) {
                 for (navItem in navItems) {
 
                     val isSelected = navItem == selected
@@ -108,7 +106,6 @@ fun AttendanceBottomNav(
 
             }
         }
-    }
 
 }
 

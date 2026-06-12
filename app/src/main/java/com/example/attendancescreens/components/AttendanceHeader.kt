@@ -27,7 +27,7 @@ fun AttendanceHeader(modifier: Modifier = Modifier){
     val subtext = "Good morning! Mark your attendance"
     val image = painterResource(R.drawable.profile)
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 24.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,

@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     val room_version = "2.8.4"
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

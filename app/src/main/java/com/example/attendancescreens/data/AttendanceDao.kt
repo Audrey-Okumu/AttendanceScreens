@@ -12,10 +12,19 @@ interface AttendanceDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAttendance(attendanceEntity: AttendanceEntity)
 
-    @Update(onConflict = OnConflictStrategy.IGNORE)
+    @Update
     suspend fun updateAttendance(attendanceEntity: AttendanceEntity)
 
     @Query("SELECT * FROM attendance_table WHERE id = :id")
     fun getAttendanceById(id: Int): Flow<AttendanceEntity?>
+
+    @Query(""" SELECT * FROM attendance_table ORDER BY checkInMillis DESC """)
+    fun getAllAttendance(): Flow<List<AttendanceEntity>>
+
+    @Query(" SELECT * FROM attendance_table WHERE checkOutMillis IS NULL LIMIT 1 ")
+    fun getActiveAttendanceFlow(): Flow<AttendanceEntity?>
+
+    @Query(" SELECT * FROM attendance_table WHERE checkOutMillis IS NULL LIMIT 1 ")
+    suspend fun getActiveAttendance(): AttendanceEntity?
 
 }
