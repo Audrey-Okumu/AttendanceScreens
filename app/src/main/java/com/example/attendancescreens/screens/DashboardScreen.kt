@@ -40,29 +40,56 @@ fun DashboardScreen(onClick: () -> Unit) {
     val active by viewModel.activeAttendance.collectAsState()
     val locale = LocalConfiguration.current.locales[0]
 
-    Column(modifier = Modifier.fillMaxSize().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier = Modifier.height(40.dp))
-        Text(SimpleDateFormat("HH:mm", locale).format(Date()), fontSize = 60.sp)
-        Text(SimpleDateFormat("MMMM dd, yyyy - EEEE", locale).format(Date()), color = AppTextGray)
-        
-        Spacer(modifier = Modifier.height(60.dp))
-        
-        Surface(
-            shape = CircleShape, color = White, shadowElevation = 10.dp, border = BorderStroke(20.dp, AppLightGray),
-            modifier = Modifier.size(180.dp).clickable { viewModel.toggleAttendance(); onClick() }
+    Surface(
+        modifier = Modifier
+            .fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(20.dp), 
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                Icon(Icons.Default.TouchApp, null, tint = AppDarkGreen, modifier = Modifier.size(48.dp))
-                Text(if (active == null) "Check in" else "Check out", color = AppDarkGreen, fontWeight = FontWeight.Medium)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(SimpleDateFormat("HH:mm", locale).format(Date()), fontSize = 60.sp)
+            Text(SimpleDateFormat("MMMM dd, yyyy - EEEE", locale).format(Date()), color = AppTextGray)
+            
+            Spacer(modifier = Modifier.height(60.dp))
+            
+            Surface(
+                shape = CircleShape,
+                color = White,
+                shadowElevation = 10.dp,
+                modifier = Modifier
+                    .size(180.dp)
+                    .clickable {
+                        viewModel.toggleAttendance()
+                        onClick()
+                    },
+                border = BorderStroke(20.dp, AppLightGray)
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Icon(Icons.Default.TouchApp, null, tint = AppDarkGreen, modifier = Modifier.size(48.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = if (active == null) "Check in" else "Check out",
+                        color = AppDarkGreen,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
-        }
 
-        Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            StatusItem(Icons.AutoMirrored.Filled.Login, active?.checkInTime ?: "--:--", "Check In")
-            StatusItem(Icons.AutoMirrored.Filled.Logout, active?.checkOutTime ?: "--:--", "Check Out")
-            StatusItem(Icons.Default.History, active?.totalHours ?: "--:--", "Total Hrs")
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                StatusItem(Icons.AutoMirrored.Filled.Login, active?.checkInTime ?: "--:--", "Check In")
+                StatusItem(Icons.AutoMirrored.Filled.Logout, active?.checkOutTime ?: "--:--", "Check Out")
+                StatusItem(Icons.Default.History, active?.totalHours ?: "--:--", "Total Hrs")
+            }
         }
     }
 }

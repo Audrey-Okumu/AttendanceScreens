@@ -10,7 +10,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -54,38 +57,41 @@ fun MainScreen(modifier: Modifier = Modifier){
 
     val selectedState = remember { mutableStateOf(items[0]) }
     var selected by selectedState
-    Scaffold(
-        modifier= modifier.fillMaxSize(),
-        topBar = {
-            AttendanceHeader()
-        },
-        bottomBar = {
-            AttendanceBottomNav(
-                navItems = items,
-                selected = selected,
-                onItemSelected = { navItem ->
-                    selected = navItem
-                    when (navItem.id) {
-                        1 -> navController.navigate(HomeRoute)
-                        2 -> navController.navigate(CalendarRoute)
+    Surface(
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Scaffold(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(top= 20.dp,bottom= 40.dp),
+            topBar = {
+                AttendanceHeader()
+            },
+            bottomBar = {
+                AttendanceBottomNav(
+                    navItems = items,
+                    selected = selected,
+                    onItemSelected = { navItem ->
+                        selected = navItem
+                        when (navItem.id) {
+                            1 -> navController.navigate(HomeRoute)
+                            2 -> navController.navigate(CalendarRoute)
+                        }
                     }
-                }
-            )
-        }
-        ){
-        innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = HomeRoute,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable<HomeRoute> {
-                DashboardScreen(onClick = { })
-            }
-            composable<CalendarRoute> {
-                CalendarScreen(
-
                 )
+            }
+        ) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = HomeRoute,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable<HomeRoute> {
+                    DashboardScreen(onClick = { })
+                }
+                composable<CalendarRoute> {
+                    CalendarScreen()
+                }
             }
         }
     }

@@ -16,6 +16,9 @@ class AttendanceViewModel(private val repository: AttendanceRepository) : ViewMo
     val activeAttendance = repository.getActiveAttendanceFlow()
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+    val history = repository.getAllAttendance()
+        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
     fun toggleAttendance() = viewModelScope.launch {
         val active = repository.getActiveAttendance()
         val now = System.currentTimeMillis()
