@@ -11,5 +11,6 @@ data class AttendanceEntity(
     val checkOutTime : String? = null,
     val checkInMillis : Long,
     val checkOutMillis : Long? = null,
-    val totalHours : String? = null
+    val totalHours : String? = null,
+    val isActive : Boolean = true
 )

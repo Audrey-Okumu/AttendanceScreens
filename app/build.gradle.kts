@@ -66,7 +66,7 @@ dependencies {
 
     val nav_version = "2.9.8"
     implementation("androidx.navigation:navigation-compose:$nav_version")
-    //Room
+
     implementation("androidx.room:room-runtime:${room_version}")
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:${room_version}")

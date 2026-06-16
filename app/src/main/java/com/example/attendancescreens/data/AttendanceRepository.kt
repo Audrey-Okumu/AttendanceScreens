@@ -1,5 +1,7 @@
 package com.example.attendancescreens.data
 
+import kotlinx.coroutines.delay
+
 class AttendanceRepository(
     private val dao: AttendanceDao
 ) {
@@ -13,6 +15,8 @@ class AttendanceRepository(
 
     suspend fun checkOut(attendanceEntity: AttendanceEntity) {
         dao.updateAttendance(attendanceEntity)
+        delay(2500)
+        dao.removeAllActives()
     }
 
     fun getActiveAttendanceFlow() =

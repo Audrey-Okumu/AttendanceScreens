@@ -1,0 +1,64 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "ef4631f969cdad8110bc8c68801414e6",
+    "entities": [
+      {
+        "tableName": "attendance_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `checkInTime` TEXT NOT NULL, `checkOutTime` TEXT, `checkInMillis` INTEGER NOT NULL, `checkOutMillis` INTEGER, `totalHours` TEXT, `isActive` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "checkInTime",
+            "columnName": "checkInTime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "checkOutTime",
+            "columnName": "checkOutTime",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "checkInMillis",
+            "columnName": "checkInMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "checkOutMillis",
+            "columnName": "checkOutMillis",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "totalHours",
+            "columnName": "totalHours",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "isActive",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ef4631f969cdad8110bc8c68801414e6')"
+    ]
+  }
+}
