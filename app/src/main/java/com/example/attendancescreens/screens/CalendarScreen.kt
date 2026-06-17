@@ -20,6 +20,7 @@ import com.example.attendancescreens.data.AttendanceRepository
 import com.example.attendancescreens.ui.viewmodel.AttendanceViewModel
 import com.example.attendancescreens.ui.viewmodel.AttendanceViewModelFactory
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
@@ -51,6 +52,19 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
                 initialSelectedDateMillis = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
             )
 
+            val selectedDateMillis = datePickerState.selectedDateMillis ?: System.currentTimeMillis()
+            val filteredHistory = remember(history, selectedDateMillis) {
+                val selectedDate = Instant.ofEpochMilli(selectedDateMillis)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                
+                history.filter {
+                    Instant.ofEpochMilli(it.checkInMillis)
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate() == selectedDate
+                }
+            }
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -60,7 +74,7 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                items(history) { entity ->
+                items(filteredHistory) { entity ->
                     val dateObj = Date(entity.checkInMillis)
                     val dateStr = SimpleDateFormat("dd", locale).format(dateObj)
                     val dayStr = SimpleDateFormat("EEE", locale).format(dateObj)

@@ -32,6 +32,9 @@ interface AttendanceDao {
     @Query(" SELECT * FROM attendance_table WHERE isActive IS 1 LIMIT 1 ")
     suspend fun getActiveAttendance(): AttendanceEntity?
 
+    @Query("SELECT * FROM attendance_table ORDER BY checkInMillis DESC LIMIT 1")
+    fun getLatestAttendanceFlow(): Flow<AttendanceEntity?>
+
     @Query("update attendance_table set isActive = 0")
     suspend fun removeAllActives()
 

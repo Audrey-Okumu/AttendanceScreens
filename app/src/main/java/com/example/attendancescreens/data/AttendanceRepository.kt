@@ -22,6 +22,9 @@ class AttendanceRepository(
     fun getActiveAttendanceFlow() =
         dao.getActiveAttendanceFlow()
 
+    fun getLatestAttendanceFlow() =
+        dao.getLatestAttendanceFlow()
+
     suspend fun getActiveAttendance() =
         dao.getActiveAttendance()
 }
