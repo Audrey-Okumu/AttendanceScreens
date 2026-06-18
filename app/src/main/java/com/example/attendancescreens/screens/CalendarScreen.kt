@@ -36,7 +36,9 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
     val locale = LocalConfiguration.current.locales[0]
 
     Surface(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = 40.dp),
         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
     ) {
         Column(modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp)) {

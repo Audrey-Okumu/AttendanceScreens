@@ -59,8 +59,7 @@ fun MainScreen(modifier: Modifier = Modifier){
     ) {
         Scaffold(
             modifier = modifier
-                .fillMaxSize()
-                .padding(top= 20.dp,bottom= 40.dp),
+                .fillMaxSize(),
             topBar = {
                 AttendanceHeader()
             },

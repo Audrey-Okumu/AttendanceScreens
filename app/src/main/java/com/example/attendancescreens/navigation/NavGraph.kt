@@ -5,8 +5,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.attendancescreens.navigation.CalendarRoute
-import com.example.attendancescreens.navigation.HomeRoute
 import com.example.attendancescreens.screens.CalendarScreen
 import com.example.attendancescreens.screens.DashboardScreen
 
@@ -18,7 +16,7 @@ fun NavGraph(
     NavHost(
         navController = navController,
         startDestination = HomeRoute,
-        modifier = Modifier
+        modifier = modifier
     ) {
         composable<HomeRoute> {
             DashboardScreen(onClick = { })
