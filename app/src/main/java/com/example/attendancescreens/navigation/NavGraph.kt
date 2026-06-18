@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.attendancescreens.screens.CalendarScreen
 import com.example.attendancescreens.screens.DashboardScreen
+import com.example.attendancescreens.screens.LaunchScreen
 
 @Composable
 fun NavGraph(
@@ -15,9 +16,12 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeRoute,
+        startDestination = LaunchRoute,
         modifier = modifier
     ) {
+        composable<LaunchRoute>{
+            LaunchScreen(onClick = {})
+        }
         composable<HomeRoute> {
             DashboardScreen(onClick = { })
         }

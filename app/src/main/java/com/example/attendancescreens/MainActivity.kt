@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -21,12 +22,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.attendancescreens.components.AttendanceBottomNav
 import com.example.attendancescreens.components.AttendanceHeader
 import com.example.attendancescreens.navigation.CalendarRoute
 import com.example.attendancescreens.navigation.HomeRoute
 import com.example.attendancescreens.model.AttendanceNavigationItem
+import com.example.attendancescreens.navigation.LaunchRoute
 import com.example.attendancescreens.navigation.NavGraph
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
 
@@ -45,6 +49,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(modifier: Modifier = Modifier){
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
+    val showBars = currentDestination?.hasRoute<LaunchRoute>() == false
 
     val items: List<AttendanceNavigationItem> = listOf(
         AttendanceNavigationItem(id = 1, name = "Home", icon = Icons.Default.Home),
@@ -61,25 +69,29 @@ fun MainScreen(modifier: Modifier = Modifier){
             modifier = modifier
                 .fillMaxSize(),
             topBar = {
-                AttendanceHeader()
+                if (showBars) {
+                    AttendanceHeader()
+                }
             },
             bottomBar = {
-                AttendanceBottomNav(
-                    navItems = items,
-                    selected = selected,
-                    onItemSelected = { navItem ->
-                        selected = navItem
-                        when (navItem.id) {
-                            1 -> navController.navigate(HomeRoute)
-                            2 -> navController.navigate(CalendarRoute)
+                if (showBars) {
+                    AttendanceBottomNav(
+                        navItems = items,
+                        selected = selected,
+                        onItemSelected = { navItem ->
+                            selected = navItem
+                            when (navItem.id) {
+                                1 -> navController.navigate(HomeRoute)
+                                2 -> navController.navigate(CalendarRoute)
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         ) { innerPadding ->
             NavGraph(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(if (showBars) innerPadding else PaddingValues(0.dp))
             )
         }
     }
