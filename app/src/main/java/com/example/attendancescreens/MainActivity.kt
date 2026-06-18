@@ -21,16 +21,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.attendancescreens.components.AttendanceBottomNav
 import com.example.attendancescreens.components.AttendanceHeader
-import com.example.attendancescreens.components.CalendarRoute
-import com.example.attendancescreens.components.HomeRoute
+import com.example.attendancescreens.navigation.CalendarRoute
+import com.example.attendancescreens.navigation.HomeRoute
 import com.example.attendancescreens.model.AttendanceNavigationItem
-import com.example.attendancescreens.screens.CalendarScreen
-import com.example.attendancescreens.screens.DashboardScreen
+import com.example.attendancescreens.navigation.NavGraph
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
 
 class MainActivity : ComponentActivity() {
@@ -81,18 +78,10 @@ fun MainScreen(modifier: Modifier = Modifier){
                 )
             }
         ) { innerPadding ->
-            NavHost(
+            NavGraph(
                 navController = navController,
-                startDestination = HomeRoute,
                 modifier = Modifier.padding(innerPadding)
-            ) {
-                composable<HomeRoute> {
-                    DashboardScreen(onClick = { })
-                }
-                composable<CalendarRoute> {
-                    CalendarScreen()
-                }
-            }
+            )
         }
     }
 }

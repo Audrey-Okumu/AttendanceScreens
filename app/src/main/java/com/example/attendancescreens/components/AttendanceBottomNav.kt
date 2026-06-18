@@ -1,6 +1,5 @@
 package com.example.attendancescreens.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -11,9 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -32,17 +29,10 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import com.example.attendancescreens.model.*
-import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
+import com.example.attendancescreens.model.AttendanceNavigationItem
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppGoldAccent
-import kotlinx.serialization.Serializable
-
-@Serializable object HomeRoute
-@Serializable object CalendarRoute
+import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
 
 @Composable
 fun AttendanceBottomNav(
@@ -58,7 +48,7 @@ fun AttendanceBottomNav(
             .padding(10.dp)
             .clip(RoundedCornerShape(40.dp)),
         color = AppDarkGreen,
-        contentColor = Color.White
+        contentColor = White
     ) {
 
         NavigationBar(
@@ -78,7 +68,7 @@ fun AttendanceBottomNav(
                         }, label = { },
                         colors = NavigationBarItemDefaults.colors(
                             indicatorColor = AppGoldAccent,
-                            unselectedIconColor = Color.White
+                            unselectedIconColor = White
                         ),
                         icon = {
                             Row(
