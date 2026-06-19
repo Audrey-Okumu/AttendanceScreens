@@ -25,10 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.attendancescreens.R
 import com.example.attendancescreens.ui.theme.AppDarkGreen
+import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
 
 @Composable
-fun LaunchScreen(onClick: () -> Unit ,modifier: Modifier = Modifier) {
+fun LaunchScreen(onSignupClick: () -> Unit ,onClick: () -> Unit,modifier: Modifier = Modifier) {
     val splash = painterResource(R.drawable.splash)
     Surface(
         modifier = Modifier
@@ -54,7 +55,7 @@ fun LaunchScreen(onClick: () -> Unit ,modifier: Modifier = Modifier) {
             )
             Spacer(modifier.height(100.dp))
             Button(
-                onClick = {},
+                onClick = onSignupClick,
                 modifier = Modifier.width(350.dp).height(50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = AppDarkGreen),
                 shape = RoundedCornerShape(36.dp)
@@ -70,7 +71,7 @@ fun LaunchScreen(onClick: () -> Unit ,modifier: Modifier = Modifier) {
             Button(
                 onClick = {},
                 modifier = Modifier.width(350.dp).height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AppDarkGreen),
+                colors = ButtonDefaults.buttonColors(containerColor = AppGoldAccent),
                 shape = RoundedCornerShape(36.dp)
             ) {
                 Text(
@@ -87,11 +88,11 @@ fun LaunchScreen(onClick: () -> Unit ,modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun LaunchScreenPrev(){
-    LaunchScreen(onClick = {})
+    LaunchScreen(onSignupClick = {},onClick = {})
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun LaunchScreenPrevDark() = AttendanceScreensTheme(darkTheme = true){
-    LaunchScreen(onClick = {})
+    LaunchScreen(onSignupClick = {},onClick = {})
 }

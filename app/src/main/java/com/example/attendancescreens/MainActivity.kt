@@ -32,6 +32,7 @@ import com.example.attendancescreens.navigation.HomeRoute
 import com.example.attendancescreens.model.AttendanceNavigationItem
 import com.example.attendancescreens.navigation.LaunchRoute
 import com.example.attendancescreens.navigation.NavGraph
+import com.example.attendancescreens.navigation.SignupRoute
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
 
 class MainActivity : ComponentActivity() {
@@ -52,7 +53,15 @@ fun MainScreen(modifier: Modifier = Modifier){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val showBars = currentDestination?.hasRoute<LaunchRoute>() == false
+    val hideBarsRoutes = listOf(
+        LaunchRoute::class,
+        SignupRoute::class
+    )
+
+    val showBars =
+        hideBarsRoutes.none { route ->
+            currentDestination?.hasRoute(route) == true
+        }
 
     val items: List<AttendanceNavigationItem> = listOf(
         AttendanceNavigationItem(id = 1, name = "Home", icon = Icons.Default.Home),
