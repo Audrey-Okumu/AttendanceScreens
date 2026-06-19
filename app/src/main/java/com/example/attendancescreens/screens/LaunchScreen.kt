@@ -29,7 +29,7 @@ import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
 
 @Composable
-fun LaunchScreen(onSignupClick: () -> Unit ,onClick: () -> Unit,modifier: Modifier = Modifier) {
+fun LaunchScreen(onSignupClick: () -> Unit ,onLoginClick: () -> Unit ,modifier: Modifier = Modifier) {
     val splash = painterResource(R.drawable.splash)
     Surface(
         modifier = Modifier
@@ -69,7 +69,7 @@ fun LaunchScreen(onSignupClick: () -> Unit ,onClick: () -> Unit,modifier: Modifi
             }
             Spacer(modifier = Modifier.height(20.dp))
             Button(
-                onClick = {},
+                onClick = onLoginClick,
                 modifier = Modifier.width(350.dp).height(50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = AppGoldAccent),
                 shape = RoundedCornerShape(36.dp)
@@ -88,11 +88,11 @@ fun LaunchScreen(onSignupClick: () -> Unit ,onClick: () -> Unit,modifier: Modifi
 @Preview(showBackground = true)
 @Composable
 private fun LaunchScreenPrev(){
-    LaunchScreen(onSignupClick = {},onClick = {})
+    LaunchScreen(onSignupClick = {},onLoginClick = {})
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun LaunchScreenPrevDark() = AttendanceScreensTheme(darkTheme = true){
-    LaunchScreen(onSignupClick = {},onClick = {})
+    LaunchScreen(onSignupClick = {},onLoginClick = {})
 }

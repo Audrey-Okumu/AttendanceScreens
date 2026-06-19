@@ -31,6 +31,7 @@ import com.example.attendancescreens.navigation.CalendarRoute
 import com.example.attendancescreens.navigation.HomeRoute
 import com.example.attendancescreens.model.AttendanceNavigationItem
 import com.example.attendancescreens.navigation.LaunchRoute
+import com.example.attendancescreens.navigation.LoginRoute
 import com.example.attendancescreens.navigation.NavGraph
 import com.example.attendancescreens.navigation.SignupRoute
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
@@ -55,7 +56,8 @@ fun MainScreen(modifier: Modifier = Modifier){
 
     val hideBarsRoutes = listOf(
         LaunchRoute::class,
-        SignupRoute::class
+        SignupRoute::class,
+        LoginRoute::class
     )
 
     val showBars =

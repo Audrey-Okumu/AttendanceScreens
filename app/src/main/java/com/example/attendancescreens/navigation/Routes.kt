@@ -7,3 +7,4 @@ import kotlinx.serialization.Serializable
 @Serializable object CalendarRoute
 @Serializable object LaunchRoute
 @Serializable object SignupRoute
+@Serializable object LoginRoute

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.attendancescreens.screens.CalendarScreen
 import com.example.attendancescreens.screens.DashboardScreen
 import com.example.attendancescreens.screens.LaunchScreen
+import com.example.attendancescreens.screens.LoginScreen
 import com.example.attendancescreens.screens.SignupScreen
 
 @Composable
@@ -23,7 +24,7 @@ fun NavGraph(
         composable<LaunchRoute>{
             LaunchScreen(
                 onSignupClick = {navController.navigate(SignupRoute)},
-                onClick = {}
+                onLoginClick = {navController.navigate(LoginRoute)}
             )
         }
         composable<HomeRoute> {
@@ -34,8 +35,14 @@ fun NavGraph(
         }
         composable<SignupRoute>{
             SignupScreen(
-                onBackClick = { navController.popBackStack() }
-                    )
+                onBackClick = { navController.navigate(LaunchRoute)},
+                onLoginClick = {navController.navigate(LoginRoute)}
+            )
+        }
+        composable<LoginRoute>{
+            LoginScreen(
+                onSignupClick = { navController.navigate(SignupRoute) }
+            )
         }
     }
 }

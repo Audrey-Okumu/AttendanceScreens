@@ -1,6 +1,7 @@
 package com.example.attendancescreens.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +51,7 @@ import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
 
 
 @Composable
-fun SignupScreen( onBackClick: () -> Unit,
+fun SignupScreen( onBackClick: () -> Unit,onLoginClick: () -> Unit ,
                   modifier: Modifier = Modifier) {
 
     var fullName by remember { mutableStateOf("") }
@@ -189,7 +190,8 @@ fun SignupScreen( onBackClick: () -> Unit,
                 Text(
                     "Log In",
                     color = AppGoldAccent,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.clickable(onClick = onLoginClick)
                 )
             }
             Spacer(Modifier.weight(1f))
@@ -202,11 +204,11 @@ fun SignupScreen( onBackClick: () -> Unit,
 @Preview(showBackground = true)
 @Composable
 fun SignupScreenPrev(){
-    SignupScreen(onBackClick = {})
+    SignupScreen(onBackClick = {},onLoginClick = {})
 }
 
 @Preview(showBackground = true)
 @Composable
 fun SignupScreenPrevDark() = AttendanceScreensTheme(darkTheme = true){
-    SignupScreen(onBackClick = {})
+    SignupScreen(onBackClick = {},onLoginClick = {})
 }
