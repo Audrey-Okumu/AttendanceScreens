@@ -110,12 +110,13 @@ fun LoginScreen(
         Spacer(Modifier.height(30.dp))
 
         Button(
-            onClick = {},
+            onClick = { viewModel.signInWithEmail(email, password) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
             colors = ButtonDefaults.buttonColors(containerColor = AppDarkGreen),
-            shape = RoundedCornerShape(28.dp)
+            shape = RoundedCornerShape(28.dp),
+            enabled = email.isNotBlank() && password.isNotBlank()
         ) {
             Text(
                 text = "Log In",

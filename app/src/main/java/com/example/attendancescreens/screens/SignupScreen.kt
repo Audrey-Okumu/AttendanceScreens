@@ -149,13 +149,13 @@ fun SignupScreen(
             Spacer(Modifier.height(24.dp))
 
             Button(
-                onClick = { },
+                onClick = { viewModel.signUpWithEmail(fullName, email, password) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
                 colors = ButtonDefaults.buttonColors(AppDarkGreen),
                 shape = RoundedCornerShape(16.dp),
-                enabled = agreeToTerms
+                enabled = agreeToTerms && fullName.isNotBlank() && email.isNotBlank() && password.isNotBlank()
             ) {
                 Text(
                     "Sign Up",

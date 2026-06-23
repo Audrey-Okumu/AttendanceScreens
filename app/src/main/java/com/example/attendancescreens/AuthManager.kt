@@ -11,6 +11,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 
 class AuthManager(private val context : Context) {
@@ -26,6 +27,32 @@ class AuthManager(private val context : Context) {
         GetCredentialRequest.Builder()
             .addCredentialOption(getGoogleIdOption)
             .build()
+    }
+
+    suspend fun signUpWithEmailPassword(name: String, email: String, password: String): AuthResult {
+        return try {
+            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            val user = result.user
+            
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build()
+            user?.updateProfile(profileUpdates)?.await()
+
+            AuthResult(userData = UserData(userName = name, userEmail = email))
+        } catch (e: Exception) {
+            AuthResult(errorMessage = e.localizedMessage ?: "Sign up failed")
+        }
+    }
+
+    suspend fun signInWithEmailPassword(email: String, password: String): AuthResult {
+        return try {
+            val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            val user = result.user
+            AuthResult(userData = UserData(userName = user?.displayName, userEmail = user?.email))
+        } catch (e: Exception) {
+            AuthResult(errorMessage = e.localizedMessage ?: "Login failed")
+        }
     }
 
     suspend fun signUpWithGoogle() : AuthResult{

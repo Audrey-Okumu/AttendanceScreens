@@ -30,6 +30,32 @@ class SignUpViewModel(application : Application) : AndroidViewModel(application)
         }
     }
 
+    fun signUpWithEmail(name: String, email: String, password: String) {
+        viewModelScope.launch {
+            _signupState.value = SignUpState(SignUpStateType.LOADING)
+            val result = authManager.signUpWithEmailPassword(name, email, password)
+            
+            if (result.errorMessage != null) {
+                _signupState.value = SignUpState(SignUpStateType.ERROR)
+            } else {
+                _signupState.value = SignUpState(SignUpStateType.SIGNED_IN, userData = result.userData)
+            }
+        }
+    }
+
+    fun signInWithEmail(email: String, password: String) {
+        viewModelScope.launch {
+            _signupState.value = SignUpState(SignUpStateType.LOADING)
+            val result = authManager.signInWithEmailPassword(email, password)
+            
+            if (result.errorMessage != null) {
+                _signupState.value = SignUpState(SignUpStateType.ERROR)
+            } else {
+                _signupState.value = SignUpState(SignUpStateType.SIGNED_IN, userData = result.userData)
+            }
+        }
+    }
+
     fun signOut() {
         viewModelScope.launch {
             authManager.signOut()
