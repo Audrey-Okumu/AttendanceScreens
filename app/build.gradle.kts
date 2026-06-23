@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -42,7 +43,11 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.firebase.auth)
+    implementation(libs.googleid)
     val room_version = "2.8.4"
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

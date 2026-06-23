@@ -13,9 +13,10 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SocialIcon(image: Painter) {
+fun SocialIcon(image: Painter, onClick: () -> Unit = {}) {
     Surface(
         modifier = Modifier.size(52.dp),
+        onClick = onClick,
         shape = CircleShape,
         color = MaterialTheme.colorScheme.surface,
         shadowElevation = 2.dp

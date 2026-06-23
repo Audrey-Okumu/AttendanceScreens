@@ -42,17 +42,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.attendancescreens.R
 import com.example.attendancescreens.components.SocialIcon
 import com.example.attendancescreens.components.TextField
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
+import com.example.attendancescreens.ui.viewmodel.SignUpViewModel
 
 
 @Composable
-fun SignupScreen( onBackClick: () -> Unit,onLoginClick: () -> Unit ,
-                  modifier: Modifier = Modifier) {
+fun SignupScreen(
+    onBackClick: () -> Unit,
+    onLoginClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: SignUpViewModel = viewModel()
+) {
 
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -89,7 +95,10 @@ fun SignupScreen( onBackClick: () -> Unit,onLoginClick: () -> Unit ,
             )
 
             Spacer(Modifier.height(12.dp))
-            Box(Modifier.size(60.dp).background(AppDarkGreen, CircleShape), Alignment.Center) {
+            Box(
+                Modifier
+                    .size(60.dp)
+                    .background(AppDarkGreen, CircleShape), Alignment.Center) {
                 Icon(
                     Icons.Default.PersonAdd,
                     "Add Profile",
@@ -140,10 +149,13 @@ fun SignupScreen( onBackClick: () -> Unit,onLoginClick: () -> Unit ,
             Spacer(Modifier.height(24.dp))
 
             Button(
-                onClick = {},
-                modifier = Modifier.fillMaxWidth().height(56.dp),
+                onClick = { },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
                 colors = ButtonDefaults.buttonColors(AppDarkGreen),
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(16.dp),
+                enabled = agreeToTerms
             ) {
                 Text(
                     "Sign Up",
@@ -175,9 +187,10 @@ fun SignupScreen( onBackClick: () -> Unit,onLoginClick: () -> Unit ,
             Spacer(Modifier.height(16.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                SocialIcon(painterResource(R.drawable.google))
-                SocialIcon(painterResource(R.drawable.facebook))
-                SocialIcon(painterResource(R.drawable.apple))
+                SocialIcon(
+                    image = painterResource(R.drawable.google),
+                    onClick = { viewModel.signUp() }
+                )
             }
 
             Spacer(Modifier.height(20.dp))
@@ -203,12 +216,12 @@ fun SignupScreen( onBackClick: () -> Unit,onLoginClick: () -> Unit ,
 
 @Preview(showBackground = true)
 @Composable
-fun SignupScreenPrev(){
-    SignupScreen(onBackClick = {},onLoginClick = {})
+fun SignupScreenPrev() {
+    SignupScreen(onBackClick = {}, onLoginClick = {})
 }
 
 @Preview(showBackground = true)
 @Composable
-fun SignupScreenPrevDark() = AttendanceScreensTheme(darkTheme = true){
-    SignupScreen(onBackClick = {},onLoginClick = {})
+fun SignupScreenPrevDark() = AttendanceScreensTheme(darkTheme = true) {
+    SignupScreen(onBackClick = {}, onLoginClick = {})
 }

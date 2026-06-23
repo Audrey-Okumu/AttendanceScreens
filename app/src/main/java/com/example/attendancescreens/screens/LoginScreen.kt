@@ -17,14 +17,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.attendancescreens.R
+import com.example.attendancescreens.components.SocialIcon
 import com.example.attendancescreens.components.TextField
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AppTextGray
+import com.example.attendancescreens.ui.viewmodel.SignUpViewModel
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier,onSignupClick: () -> Unit) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    onSignupClick: () -> Unit,
+    viewModel: SignUpViewModel = viewModel()
+    ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -32,7 +39,7 @@ fun LoginScreen(modifier: Modifier = Modifier,onSignupClick: () -> Unit) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(vertical = 32.dp,horizontal = 24.dp),
+            .padding(top = 26.dp, bottom = 20.dp, start = 24.dp, end = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -47,10 +54,10 @@ fun LoginScreen(modifier: Modifier = Modifier,onSignupClick: () -> Unit) {
             painter = painterResource(id = R.drawable.login),
             contentDescription = "Login Illustration",
             modifier = Modifier
-                .size(250.dp)
-                .padding(vertical = 24.dp)
+                .size(200.dp)
+                .padding(vertical = 12.dp)
         )
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.Start
@@ -100,13 +107,13 @@ fun LoginScreen(modifier: Modifier = Modifier,onSignupClick: () -> Unit) {
             }
         }
 
-        Spacer(Modifier.weight(1f))
+        Spacer(Modifier.height(30.dp))
 
         Button(
             onClick = {},
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
+                .height(52.dp),
             colors = ButtonDefaults.buttonColors(containerColor = AppDarkGreen),
             shape = RoundedCornerShape(28.dp)
         ) {
@@ -118,7 +125,36 @@ fun LoginScreen(modifier: Modifier = Modifier,onSignupClick: () -> Unit) {
             )
         }
 
-        Spacer(Modifier.height(40.dp))
+        Spacer(Modifier.height(16.dp))
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            HorizontalDivider(
+                Modifier.weight(1f),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f)
+            )
+            Text(
+                " or continue with ",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+            HorizontalDivider(
+                Modifier.weight(1f),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f)
+            )
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+            SocialIcon(
+                image = painterResource(R.drawable.google),
+                onClick = {viewModel.signUp()}
+            )
+        }
+
+        Spacer(Modifier.height(8.dp))
+
 
         Row(Modifier.padding(bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -134,7 +170,7 @@ fun LoginScreen(modifier: Modifier = Modifier,onSignupClick: () -> Unit) {
         }
 
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(12.dp))
     }
 }
 
