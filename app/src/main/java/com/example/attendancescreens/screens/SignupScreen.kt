@@ -46,19 +46,34 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.attendancescreens.R
 import com.example.attendancescreens.components.SocialIcon
 import com.example.attendancescreens.components.TextField
+import com.example.attendancescreens.model.SignUpStateType
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
 import com.example.attendancescreens.ui.viewmodel.SignUpViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 
 
 @Composable
 fun SignupScreen(
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
+    onSignupSuccess: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SignUpViewModel = viewModel()
 ) {
+    val signupState by viewModel.signupState.collectAsState()
+
+    val context = androidx.compose.ui.platform.LocalContext.current
+    LaunchedEffect(signupState.stateType, signupState.errorMessage) {
+        if (signupState.stateType == SignUpStateType.SIGNED_IN) {
+            onSignupSuccess()
+        } else if (signupState.stateType == SignUpStateType.ERROR) {
+            android.widget.Toast.makeText(context, signupState.errorMessage ?: "Sign up failed", android.widget.Toast.LENGTH_LONG).show()
+            viewModel.clearError()
+        }
+    }
 
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -217,11 +232,11 @@ fun SignupScreen(
 @Preview(showBackground = true)
 @Composable
 fun SignupScreenPrev() {
-    SignupScreen(onBackClick = {}, onLoginClick = {})
+    SignupScreen(onBackClick = {}, onLoginClick = {}, onSignupSuccess = {})
 }
 
 @Preview(showBackground = true)
 @Composable
 fun SignupScreenPrevDark() = AttendanceScreensTheme(darkTheme = true) {
-    SignupScreen(onBackClick = {}, onLoginClick = {})
+    SignupScreen(onBackClick = {}, onLoginClick = {}, onSignupSuccess = {})
 }

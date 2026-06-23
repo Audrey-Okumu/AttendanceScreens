@@ -23,7 +23,7 @@ class SignUpViewModel(application : Application) : AndroidViewModel(application)
             val result = authManager.signUpWithGoogle()
             
             if (result.errorMessage != null) {
-                _signupState.value = SignUpState(SignUpStateType.ERROR)
+                _signupState.value = SignUpState(SignUpStateType.ERROR, errorMessage = result.errorMessage)
             } else {
                 _signupState.value = SignUpState(SignUpStateType.SIGNED_IN, userData = result.userData)
             }
@@ -36,7 +36,7 @@ class SignUpViewModel(application : Application) : AndroidViewModel(application)
             val result = authManager.signUpWithEmailPassword(name, email, password)
             
             if (result.errorMessage != null) {
-                _signupState.value = SignUpState(SignUpStateType.ERROR)
+                _signupState.value = SignUpState(SignUpStateType.ERROR, errorMessage = result.errorMessage)
             } else {
                 _signupState.value = SignUpState(SignUpStateType.SIGNED_IN, userData = result.userData)
             }
@@ -49,11 +49,15 @@ class SignUpViewModel(application : Application) : AndroidViewModel(application)
             val result = authManager.signInWithEmailPassword(email, password)
             
             if (result.errorMessage != null) {
-                _signupState.value = SignUpState(SignUpStateType.ERROR)
+                _signupState.value = SignUpState(SignUpStateType.ERROR, errorMessage = result.errorMessage)
             } else {
                 _signupState.value = SignUpState(SignUpStateType.SIGNED_IN, userData = result.userData)
             }
         }
+    }
+
+    fun clearError() {
+        _signupState.value = _signupState.value.copy(stateType = SignUpStateType.SIGNED_OUT, errorMessage = null)
     }
 
     fun signOut() {

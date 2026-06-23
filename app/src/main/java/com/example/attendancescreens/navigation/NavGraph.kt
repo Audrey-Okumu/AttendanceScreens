@@ -36,12 +36,22 @@ fun NavGraph(
         composable<SignupRoute>{
             SignupScreen(
                 onBackClick = { navController.navigate(LaunchRoute)},
-                onLoginClick = {navController.navigate(LoginRoute)}
+                onLoginClick = {navController.navigate(LoginRoute)},
+                onSignupSuccess = {
+                    navController.navigate(HomeRoute) {
+                        popUpTo(LaunchRoute) { inclusive = true }
+                    }
+                }
             )
         }
         composable<LoginRoute>{
             LoginScreen(
-                onSignupClick = { navController.navigate(SignupRoute) }
+                onSignupClick = { navController.navigate(SignupRoute) },
+                onLoginSuccess = {
+                    navController.navigate(HomeRoute) {
+                        popUpTo(LaunchRoute) { inclusive = true }
+                    }
+                }
             )
         }
     }

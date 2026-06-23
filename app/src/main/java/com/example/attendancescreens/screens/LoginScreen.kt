@@ -24,14 +24,28 @@ import com.example.attendancescreens.components.TextField
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AppTextGray
+import com.example.attendancescreens.model.SignUpStateType
 import com.example.attendancescreens.ui.viewmodel.SignUpViewModel
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     onSignupClick: () -> Unit,
+    onLoginSuccess: () -> Unit,
     viewModel: SignUpViewModel = viewModel()
-    ) {
+) {
+    val loginState by viewModel.signupState.collectAsState()
+
+    val context = androidx.compose.ui.platform.LocalContext.current
+    LaunchedEffect(loginState.stateType, loginState.errorMessage) {
+        if (loginState.stateType == SignUpStateType.SIGNED_IN) {
+            onLoginSuccess()
+        } else if (loginState.stateType == SignUpStateType.ERROR) {
+            android.widget.Toast.makeText(context, loginState.errorMessage ?: "Login failed", android.widget.Toast.LENGTH_LONG).show()
+            viewModel.clearError()
+        }
+    }
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -178,5 +192,5 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(onSignupClick = {})
+    LoginScreen(onSignupClick = {}, onLoginSuccess = {})
 }
