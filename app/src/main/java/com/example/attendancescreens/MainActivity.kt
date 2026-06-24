@@ -35,6 +35,7 @@ import com.example.attendancescreens.navigation.LoginRoute
 import com.example.attendancescreens.navigation.NavGraph
 import com.example.attendancescreens.navigation.SignupRoute
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +50,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier){
+fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -64,6 +65,9 @@ fun MainScreen(modifier: Modifier = Modifier){
         hideBarsRoutes.none { route ->
             currentDestination?.hasRoute(route) == true
         }
+
+    val currentUser = remember { FirebaseAuth.getInstance().currentUser }
+    val userName = currentUser?.displayName
 
     val items: List<AttendanceNavigationItem> = listOf(
         AttendanceNavigationItem(id = 1, name = "Home", icon = Icons.Default.Home),
@@ -81,7 +85,7 @@ fun MainScreen(modifier: Modifier = Modifier){
                 .fillMaxSize(),
             topBar = {
                 if (showBars) {
-                    AttendanceHeader()
+                    AttendanceHeader(userName = userName)
                 }
             },
             bottomBar = {
@@ -107,6 +111,7 @@ fun MainScreen(modifier: Modifier = Modifier){
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {

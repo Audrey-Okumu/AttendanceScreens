@@ -1,5 +1,6 @@
 package com.example.attendancescreens.components
 
+import android.R.attr.name
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,8 +29,12 @@ import com.example.attendancescreens.ui.theme.AppLightGray
 import com.example.attendancescreens.ui.theme.AppTextGray
 
 @Composable
-fun AttendanceHeader(modifier: Modifier = Modifier){
-    val name = "Hey Hassan!"
+fun AttendanceHeader(
+    userName: String? = null,
+    modifier: Modifier = Modifier
+) {
+    val displayUserName = userName ?: "User"
+    val nameText = "Hey $displayUserName!"
     val subtext = "Good morning! Mark your attendance"
     Surface(
         color = MaterialTheme.colorScheme.background,
@@ -45,7 +50,7 @@ fun AttendanceHeader(modifier: Modifier = Modifier){
         ) {
             Column {
                 Text(
-                    text = name,
+                    text = nameText,
                     fontWeight = Bold,
                     fontSize = 20.sp
                 )
@@ -74,5 +79,5 @@ fun AttendanceHeader(modifier: Modifier = Modifier){
 @Preview(showBackground = true)
 @Composable
 private fun AttendanceHeaderPrev(){
-    AttendanceHeader()
+    AttendanceHeader(userName = "Audrey")
 }
