@@ -33,6 +33,7 @@ import com.example.attendancescreens.model.AttendanceNavigationItem
 import com.example.attendancescreens.navigation.LaunchRoute
 import com.example.attendancescreens.navigation.LoginRoute
 import com.example.attendancescreens.navigation.NavGraph
+import com.example.attendancescreens.navigation.ProfileRoute
 import com.example.attendancescreens.navigation.SignupRoute
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
 import com.google.firebase.auth.FirebaseAuth
@@ -98,6 +99,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                             when (navItem.id) {
                                 1 -> navController.navigate(HomeRoute)
                                 2 -> navController.navigate(CalendarRoute)
+                                3 -> navController.navigate(ProfileRoute)
                             }
                         }
                     )

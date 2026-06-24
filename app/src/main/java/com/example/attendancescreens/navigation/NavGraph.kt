@@ -9,6 +9,7 @@ import com.example.attendancescreens.screens.CalendarScreen
 import com.example.attendancescreens.screens.DashboardScreen
 import com.example.attendancescreens.screens.LaunchScreen
 import com.example.attendancescreens.screens.LoginScreen
+import com.example.attendancescreens.screens.ProfileScreen
 import com.example.attendancescreens.screens.SignupScreen
 
 @Composable
@@ -53,6 +54,9 @@ fun NavGraph(
                     }
                 }
             )
+        }
+        composable < ProfileRoute>{
+            ProfileScreen(onClick = { })
         }
     }
 }

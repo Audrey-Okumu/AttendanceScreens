@@ -8,3 +8,4 @@ import kotlinx.serialization.Serializable
 @Serializable object LaunchRoute
 @Serializable object SignupRoute
 @Serializable object LoginRoute
+@Serializable object ProfileRoute
