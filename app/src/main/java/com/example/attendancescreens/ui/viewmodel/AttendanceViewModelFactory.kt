@@ -9,6 +9,9 @@ class AttendanceViewModelFactory(
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AttendanceViewModel(repository) as T
+        if (modelClass.isAssignableFrom(AttendanceViewModel::class.java)) {
+            return AttendanceViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

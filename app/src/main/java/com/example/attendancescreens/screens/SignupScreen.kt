@@ -61,7 +61,7 @@ fun SignupScreen(
     onLoginClick: () -> Unit,
     onSignupSuccess: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SignUpViewModel = viewModel()
+    viewModel: SignUpViewModel = viewModel(factory = SignUpViewModel.Factory)
 ) {
     val signupState by viewModel.signupState.collectAsState()
 

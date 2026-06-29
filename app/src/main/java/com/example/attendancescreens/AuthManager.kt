@@ -15,15 +15,15 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 
 class AuthManager(private val context : Context) {
-    private val firebaseAuth : FirebaseAuth by lazy {FirebaseAuth.getInstance()}
-    private val credentialManager : CredentialManager by lazy {CredentialManager.create(context)}
-    private val getGoogleIdOption : GetGoogleIdOption by lazy {
+    private val firebaseAuth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val credentialManager: CredentialManager by lazy { CredentialManager.create(context) }
+    private val getGoogleIdOption: GetGoogleIdOption by lazy {
         GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
             .setServerClientId("78576521283-4tbfnvgo7g316jt311qcg6tg06f96jj3.apps.googleusercontent.com")
             .build()
     }
-    private val getCredentialRequest : GetCredentialRequest by lazy {
+    private val getCredentialRequest: GetCredentialRequest by lazy {
         GetCredentialRequest.Builder()
             .addCredentialOption(getGoogleIdOption)
             .build()
@@ -33,13 +33,13 @@ class AuthManager(private val context : Context) {
         return try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val user = result.user
-            
+
             val profileUpdates = UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
                 .build()
             user?.updateProfile(profileUpdates)?.await()
-
-            AuthResult(userData = UserData(userName = name, userEmail = email))
+            
+            AuthResult(userData = UserData(userName = user?.displayName, userEmail = user?.email))
         } catch (e: Exception) {
             AuthResult(errorMessage = e.localizedMessage ?: "Sign up failed")
         }
@@ -55,26 +55,27 @@ class AuthManager(private val context : Context) {
         }
     }
 
-    suspend fun signUpWithGoogle() : AuthResult{
+    suspend fun signUpWithGoogle(): AuthResult {
         try {
-            val credential = credentialManager.getCredential(context,getCredentialRequest).credential
+            val credential =
+                credentialManager.getCredential(context, getCredentialRequest).credential
 
-            if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL){
+            if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val idToken = googleIdTokenCredential.idToken
 
-                val firebaseCredential = GoogleAuthProvider.getCredential(idToken,null)
+                val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
                 firebaseAuth.signInWithCredential(firebaseCredential).await()
 
-                googleIdTokenCredential.apply{
+                googleIdTokenCredential.apply {
                     val userData = UserData(userName = displayName, userEmail = id)
                     val authResult = AuthResult(userData)
                     return authResult
                 }
-            }else{
+            } else {
                 return AuthResult(errorMessage = "Invalid Credentials")
             }
-        }catch (exception : Exception){
+        } catch (exception: Exception) {
             return AuthResult(errorMessage = exception.toString())
         }
 

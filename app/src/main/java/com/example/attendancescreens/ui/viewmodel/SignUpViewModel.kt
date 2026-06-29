@@ -1,8 +1,10 @@
 package com.example.attendancescreens.ui.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import com.example.attendancescreens.AuthManager
 import com.example.attendancescreens.model.SignUpState
 import com.example.attendancescreens.model.SignUpStateType
@@ -11,11 +13,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SignUpViewModel(application : Application) : AndroidViewModel(application) {
+class SignUpViewModel(private val authManager: AuthManager) : ViewModel() {
     private val _signupState = MutableStateFlow(SignUpState())
     val signupState: StateFlow<SignUpState> = _signupState.asStateFlow()
-
-    private val authManager by lazy { AuthManager(application.applicationContext) }
 
     fun signUp() {
         viewModelScope.launch {
@@ -64,6 +64,16 @@ class SignUpViewModel(application : Application) : AndroidViewModel(application)
         viewModelScope.launch {
             authManager.signOut()
             _signupState.value = SignUpState(SignUpStateType.SIGNED_OUT)
+        }
+    }
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+                val application = checkNotNull(extras[APPLICATION_KEY])
+                return SignUpViewModel(AuthManager(application.applicationContext)) as T
+            }
         }
     }
 }
