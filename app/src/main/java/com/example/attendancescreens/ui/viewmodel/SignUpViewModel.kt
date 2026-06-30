@@ -25,7 +25,11 @@ class SignUpViewModel(private val authManager: AuthManager) : ViewModel() {
             if (result.errorMessage != null) {
                 _signupState.value = SignUpState(SignUpStateType.ERROR, errorMessage = result.errorMessage)
             } else {
-                _signupState.value = SignUpState(SignUpStateType.SIGNED_IN, userData = result.userData)
+                _signupState.value = SignUpState(
+                    SignUpStateType.SIGNED_IN,
+                    userData = result.userData,
+                    isEmailVerified = result.isEmailVerified
+                )
             }
         }
     }
@@ -38,7 +42,11 @@ class SignUpViewModel(private val authManager: AuthManager) : ViewModel() {
             if (result.errorMessage != null) {
                 _signupState.value = SignUpState(SignUpStateType.ERROR, errorMessage = result.errorMessage)
             } else {
-                _signupState.value = SignUpState(SignUpStateType.SIGNED_IN, userData = result.userData)
+                _signupState.value = SignUpState(
+                    SignUpStateType.SIGNED_IN,
+                    userData = result.userData,
+                    isEmailVerified = result.isEmailVerified
+                )
             }
         }
     }
@@ -51,7 +59,11 @@ class SignUpViewModel(private val authManager: AuthManager) : ViewModel() {
             if (result.errorMessage != null) {
                 _signupState.value = SignUpState(SignUpStateType.ERROR, errorMessage = result.errorMessage)
             } else {
-                _signupState.value = SignUpState(SignUpStateType.SIGNED_IN, userData = result.userData)
+                _signupState.value = SignUpState(
+                    SignUpStateType.SIGNED_IN,
+                    userData = result.userData,
+                    isEmailVerified = result.isEmailVerified
+                )
             }
         }
     }

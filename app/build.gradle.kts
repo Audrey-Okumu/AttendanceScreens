@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(platform("com.google.firebase:firebase-bom:34.15.0"))
     implementation(libs.firebase.auth)
     implementation(libs.googleid)
     val room_version = "2.8.4"

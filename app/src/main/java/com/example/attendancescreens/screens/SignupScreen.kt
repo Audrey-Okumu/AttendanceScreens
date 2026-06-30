@@ -48,9 +48,14 @@ fun SignupScreen(
     val signupState by viewModel.signupState.collectAsState()
 
     val context = androidx.compose.ui.platform.LocalContext.current
-    LaunchedEffect(signupState.stateType, signupState.errorMessage) {
+    LaunchedEffect(signupState.stateType, signupState.errorMessage, signupState.isEmailVerified) {
         if (signupState.stateType == SignUpStateType.SIGNED_IN) {
-            onSignupSuccess()
+            if (!signupState.isEmailVerified) {
+                android.widget.Toast.makeText(context, "Sign up successful! Please check your email to verify your account.", android.widget.Toast.LENGTH_LONG).show()
+                viewModel.signOut()
+            } else {
+                onSignupSuccess()
+            }
         } else if (signupState.stateType == SignUpStateType.ERROR) {
             android.widget.Toast.makeText(context, signupState.errorMessage ?: "Sign up failed", android.widget.Toast.LENGTH_LONG).show()
             viewModel.clearError()

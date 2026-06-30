@@ -38,8 +38,13 @@ class AuthManager(private val context : Context) {
                 .setDisplayName(name)
                 .build()
             user?.updateProfile(profileUpdates)?.await()
+
+            user?.sendEmailVerification()?.await()
             
-            AuthResult(userData = UserData(userName = user?.displayName, userEmail = user?.email))
+            AuthResult(
+                userData = UserData(userName = user?.displayName, userEmail = user?.email),
+                isEmailVerified = user?.isEmailVerified ?: false
+            )
         } catch (e: Exception) {
             AuthResult(errorMessage = e.localizedMessage ?: "Sign up failed")
         }
@@ -49,7 +54,20 @@ class AuthManager(private val context : Context) {
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             val user = result.user
-            AuthResult(userData = UserData(userName = user?.displayName, userEmail = user?.email))
+
+            if (user != null && !user.isEmailVerified) {
+                firebaseAuth.signOut()
+                return AuthResult(
+                    userData = UserData(userName = user.displayName, userEmail = user.email),
+                    isEmailVerified = false,
+                    errorMessage = "Please verify your email address. Check your inbox."
+                )
+            }
+
+            AuthResult(
+                userData = UserData(userName = user?.displayName, userEmail = user?.email),
+                isEmailVerified = user?.isEmailVerified ?: false
+            )
         } catch (e: Exception) {
             AuthResult(errorMessage = e.localizedMessage ?: "Login failed")
         }
