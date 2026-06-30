@@ -2,4 +2,15 @@
 <resources>
 
     <style name="Theme.AttendanceScreens" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Splash Screen Theme -->
+    <style name="Theme.AttendanceScreens.Splash"
+        parent="Theme.SplashScreen">
+
+        <item name="windowSplashScreenBackground">@color/app_dark_green</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.AttendanceScreens</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+
+    </style>
 </resources>

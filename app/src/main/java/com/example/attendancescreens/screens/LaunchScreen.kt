@@ -62,7 +62,7 @@ fun LaunchScreen(onSignupClick: () -> Unit ,onLoginClick: () -> Unit ,modifier: 
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                text = "HR CONNECT",
+                text = "Smart Attendance",
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = Bold,
                     letterSpacing = 4.sp

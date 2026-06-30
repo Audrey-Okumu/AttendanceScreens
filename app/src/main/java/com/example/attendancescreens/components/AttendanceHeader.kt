@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppLightGray
 import com.example.attendancescreens.ui.theme.AppTextGray
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun AttendanceHeader(
@@ -35,7 +37,14 @@ fun AttendanceHeader(
     onProfileClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val displayUserName = userName ?: "Audrey"
+    val currentUser = remember {
+        try {
+            FirebaseAuth.getInstance().currentUser
+        } catch (_: Exception) {
+            null
+        }
+    }
+    val userName = currentUser?.displayName ?: "User"
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = modifier.fillMaxWidth()
@@ -50,7 +59,7 @@ fun AttendanceHeader(
         ) {
             Column {
                 Text(
-                    text = "Hello, $displayUserName!",
+                    text = "Hello, $userName!",
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = Bold),
                     color = MaterialTheme.colorScheme.onBackground
                 )
