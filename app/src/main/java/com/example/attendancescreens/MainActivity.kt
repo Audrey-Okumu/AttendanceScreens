@@ -86,7 +86,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 .fillMaxSize(),
             topBar = {
                 if (showBars) {
-                    AttendanceHeader(userName = userName)
+                    AttendanceHeader(
+                        userName = userName,
+                        onProfileClick = {
+                            if (currentDestination?.hasRoute(ProfileRoute::class) != true) {
+                                navController.navigate(ProfileRoute)
+                            }
+                        }
+                    )
                 }
             },
             bottomBar = {
