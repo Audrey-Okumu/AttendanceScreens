@@ -36,21 +36,29 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
     val history by viewModel.history.collectAsState()
     val locale = LocalConfiguration.current.locales[0]
 
-    Surface(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(top = 40.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-    ) {
-        Column(modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
-            ) {
-                Text(text = "Attendance History", fontWeight = Bold, fontSize = 24.sp)
-            }
-
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { 
+                    Text(
+                        "Attendance History", 
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = Bold)
+                    ) 
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.background
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp)
+        ) {
             val datePickerState = rememberDatePickerState(
                 initialSelectedDateMillis = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
             )
@@ -70,11 +78,42 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 24.dp)
             ) {
                 item {
-                    Calendar(datePickerState = datePickerState)
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Card(
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surface
+                        )
+                    ) {
+                        Calendar(datePickerState = datePickerState)
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    
+                    Text(
+                        text = "Logs",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = Bold),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                if (filteredHistory.isEmpty()) {
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().padding(32.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                "No logs for this date",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                            )
+                        }
+                    }
                 }
 
                 items(filteredHistory) { entity ->
@@ -88,7 +127,7 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
                         checkIn = entity.checkInTime,
                         checkOut = entity.checkOutTime ?: "--:--",
                         totalHrs = entity.totalHours ?: "--:--",
-                        location = "NLS Tech Solutions Limited, Saachi Plaza",
+                        location = "Office HQ",
                         isMainColor = entity.checkOutTime == null
                     )
                 }

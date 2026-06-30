@@ -30,23 +30,23 @@ fun TextField(
     passwordVisible: Boolean = false,
     onPasswordToggle: (() -> Unit)? = null,
 ){
-    TextField(
+    androidx.compose.material3.OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = Modifier.fillMaxWidth().height(56.dp),
+        modifier = Modifier.fillMaxWidth(),
         placeholder = {
             Text(
                 placeholder,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                fontSize = 14.sp
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )
         },
         leadingIcon = {
             Icon(
                 leadingIcon,
                 null,
-                Modifier.size(20.dp),
-                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                Modifier.size(24.dp),
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
             )
         },
         trailingIcon = if (isPassword) {
@@ -55,13 +55,19 @@ fun TextField(
                     Icon(
                         imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                     )
                 }
             }
         } else null,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
-        singleLine = true
+        singleLine = true,
+        colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surface
+        )
     )
 }

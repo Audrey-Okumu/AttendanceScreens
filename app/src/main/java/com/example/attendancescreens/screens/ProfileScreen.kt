@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.attendancescreens.components.ProfileMenuItem
 import com.example.attendancescreens.components.ProfileStatItem
+import com.example.attendancescreens.components.StatCard
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AppLightGray
@@ -64,103 +65,105 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
     val userName = currentUser?.displayName ?: "User"
     val userEmail = currentUser?.email ?: "user@example.com"
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
+    Surface(
+        modifier = modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .background(
-                    AppDarkGreen,
-                    shape = RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp)
-                )
-        )
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(60.dp))
 
-            Text(
-                text = "Profile",
-                color = White,
-                fontSize = 24.sp,
-                fontWeight = Bold
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Profile Card
-            Surface(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                shape = RoundedCornerShape(24.dp),
-                color = White,
-                tonalElevation = 8.dp,
-                shadowElevation = 4.dp
+                    .height(280.dp)
             ) {
+                // Background Curve
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp)
+                ) {}
+
+                // Profile Image and Info
                 Column(
-                    modifier = Modifier.padding(24.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(100.dp)
-                            .background(AppLightGray, CircleShape),
-                        contentAlignment = Alignment.Center
+                    Surface(
+                        modifier = Modifier.size(120.dp),
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.surface,
+                        shadowElevation = 8.dp,
+                        border = androidx.compose.foundation.BorderStroke(4.dp, MaterialTheme.colorScheme.primaryContainer)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "Profile Picture",
-                            modifier = Modifier.size(60.dp),
-                            tint = AppDarkGreen
-                        )
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.Default.Person,
+                                contentDescription = null,
+                                modifier = Modifier.size(70.dp),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
                     Text(
                         text = userName,
-                        fontSize = 22.sp,
-                        fontWeight = Bold,
-                        color = Color.Black
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = Bold),
+                        color = MaterialTheme.colorScheme.onBackground
                     )
-
+                    
                     Text(
-                        text = "Senior Employee",
-                        fontSize = 14.sp,
-                        color = AppTextGray
+                        text = "Senior Software Engineer",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                     )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        ProfileStatItem(icon = Icons.Default.Badge, label = "ID", value = "EMP-1024")
-                        ProfileStatItem(icon = Icons.Default.Email, label = "Email", value = userEmail)
-                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Stats Section
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                StatCard(
+                    modifier = Modifier.weight(1f),
+                    icon = Icons.Default.Badge,
+                    label = "Employee ID",
+                    value = "EMP-2024"
+                )
+                StatCard(
+                    modifier = Modifier.weight(1f),
+                    icon = Icons.Default.Email,
+                    label = "Work Email",
+                    value = userEmail.split("@").first() + "@..."
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Menu Section
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
                 shape = RoundedCornerShape(24.dp),
-                color = White,
-                shadowElevation = 2.dp
+                color = MaterialTheme.colorScheme.surface,
+                shadowElevation = 2.dp,
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
                     ProfileMenuItem(icon = Icons.Default.Settings, title = "Account Settings")
@@ -170,14 +173,14 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
                     
                     HorizontalDivider(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        thickness = 0.5.dp,
-                        color = AppLightGray
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant
                     )
 
                     ProfileMenuItem(
                         icon = Icons.AutoMirrored.Filled.Logout,
                         title = "Logout",
-                        titleColor = Color.Red,
+                        titleColor = MaterialTheme.colorScheme.error,
                         showArrow = false,
                         onClick = onLogout
                     )

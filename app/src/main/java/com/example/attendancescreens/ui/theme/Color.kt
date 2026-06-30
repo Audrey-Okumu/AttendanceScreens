@@ -13,6 +13,12 @@ val Pink40 = Color(0xFF7D5260)
 val AppTextGray = Color(0xFF9E9E9E)
 
 val AppDarkGreen = Color(0xFF004D40)
+val AppMediumGreen = Color(0xFF00695C)
+val AppLightGreen = Color(0xFFB2DFDB)
 
-val AppLightGray = Color(0xFFE0E0E0)
+val AppLightGray = Color(0xFFF5F5F5)
 val AppGoldAccent = Color(0xFFD8BC6A)
+val AppGoldDark = Color(0xFFB89B4A)
+
+val AppSurface = Color(0xFFFFFFFF)
+val AppBackground = Color(0xFFF8F9FA)

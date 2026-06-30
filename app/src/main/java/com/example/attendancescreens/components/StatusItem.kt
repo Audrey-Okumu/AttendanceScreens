@@ -17,25 +17,27 @@ import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppTextGray
 
 
+import androidx.compose.material3.MaterialTheme
+
 @Composable
 fun StatusItem(icon: ImageVector, time: String, label: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = AppDarkGreen,
-            modifier = Modifier.size(28.dp)
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(24.dp)
         )
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = time,
-            fontWeight = Bold,
-            fontSize = 16.sp
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = Bold),
+            color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = label,
-            fontSize = 12.sp,
-            color = AppTextGray
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

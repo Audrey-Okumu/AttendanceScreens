@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.automirrored.filled.Logout
@@ -42,55 +43,99 @@ fun DashboardScreen(onClick: () -> Unit) {
     val locale = LocalConfiguration.current.locales[0]
 
     Surface(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(20.dp), 
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp), 
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(SimpleDateFormat("HH:mm", locale).format(Date()), fontSize = 60.sp)
-            Text(SimpleDateFormat("MMMM dd, yyyy - EEEE", locale).format(Date()), color = AppTextGray)
+            Spacer(modifier = Modifier.height(24.dp))
             
-            Spacer(modifier = Modifier.height(60.dp))
+            Text(
+                text = SimpleDateFormat("HH:mm", locale).format(Date()), 
+                style = MaterialTheme.typography.displayLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            )
             
-            Surface(
-                shape = CircleShape,
-                color = White,
-                shadowElevation = 10.dp,
-                modifier = Modifier
-                    .size(180.dp)
-                    .clickable {
-                        viewModel.toggleAttendance()
-                        onClick()
-                    },
-                border = BorderStroke(20.dp, AppLightGray)
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxSize()
+            Text(
+                text = SimpleDateFormat("MMMM dd, yyyy • EEEE", locale).format(Date()), 
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+            )
+            
+            Spacer(modifier = Modifier.weight(1f))
+            
+            Box(contentAlignment = Alignment.Center) {
+                // Outer glow effect
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    modifier = Modifier.size(220.dp)
+                ) {}
+                
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.surface,
+                    shadowElevation = 8.dp,
+                    modifier = Modifier
+                        .size(180.dp)
+                        .clickable {
+                            viewModel.toggleAttendance()
+                            onClick()
+                        },
+                    border = BorderStroke(8.dp, MaterialTheme.colorScheme.primaryContainer)
                 ) {
-                    Icon(Icons.Default.TouchApp, null, tint = AppDarkGreen, modifier = Modifier.size(48.dp))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = if (active == null) "Check in" else "Check out",
-                        color = AppDarkGreen,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.TouchApp, 
+                            contentDescription = null, 
+                            tint = MaterialTheme.colorScheme.primary, 
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = if (active == null) "CHECK IN" else "CHECK OUT",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                StatusItem(Icons.AutoMirrored.Filled.Login, active?.checkInTime ?: "--:--", "Check In")
-                StatusItem(Icons.AutoMirrored.Filled.Logout, active?.checkOutTime ?: "--:--", "Check Out")
-                StatusItem(Icons.Default.History, active?.totalHours ?: "--:--", "Total Hrs")
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                )
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp, horizontal = 12.dp), 
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    StatusItem(Icons.AutoMirrored.Filled.Login, active?.checkInTime ?: "--:--", "Check In")
+                    VerticalDivider(modifier = Modifier.height(40.dp).width(1.dp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
+                    StatusItem(Icons.AutoMirrored.Filled.Logout, active?.checkOutTime ?: "--:--", "Check Out")
+                    VerticalDivider(modifier = Modifier.height(40.dp).width(1.dp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
+                    StatusItem(Icons.Default.History, active?.totalHours ?: "--:--", "Total Hrs")
+                }
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

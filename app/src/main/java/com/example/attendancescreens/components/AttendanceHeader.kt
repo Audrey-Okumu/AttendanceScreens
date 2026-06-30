@@ -33,9 +33,7 @@ fun AttendanceHeader(
     userName: String? = null,
     modifier: Modifier = Modifier
 ) {
-    val displayUserName = userName ?: "User"
-    val nameText = "Hey $displayUserName!"
-    val subtext = "Good morning! Mark your attendance"
+    val displayUserName = userName ?: "Audrey"
     Surface(
         color = MaterialTheme.colorScheme.background,
         modifier = modifier.fillMaxWidth()
@@ -44,33 +42,35 @@ fun AttendanceHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
+                .padding(vertical = 12.dp, horizontal = 20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Text(
-                    text = nameText,
-                    fontWeight = Bold,
-                    fontSize = 20.sp
+                    text = "Hello, $displayUserName!",
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = Bold),
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = subtext,
-                    fontSize = 10.sp,
-                    color = AppTextGray,
+                    text = "Ready to start your day?",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 )
             }
-            Box(
-                Modifier
-                    .size(40.dp)
-                    .background(AppDarkGreen, CircleShape),
-                contentAlignment = Alignment.Center
+            Surface(
+                Modifier.size(44.dp),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.primaryContainer
             ) {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = "Profile",
-                    tint = AppLightGray
-                )
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Profile",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
             }
         }
     }

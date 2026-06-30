@@ -29,6 +29,8 @@ import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AppTextGray
 
+import androidx.compose.material3.MaterialTheme
+
 @Composable
 fun HistoryItem(
     modifier: Modifier = Modifier,
@@ -40,15 +42,16 @@ fun HistoryItem(
     location: String,
     isMainColor: Boolean = true,
 ) {
-    val dateBoxColor = if (isMainColor) AppDarkGreen else AppGoldAccent
+    val dateBoxColor = if (isMainColor) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(vertical = 4.dp),
         shape = RoundedCornerShape(20.dp),
-        color = Color.White,
-        shadowElevation = 2.dp
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 1.dp,
+        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(
             modifier = Modifier
@@ -58,7 +61,7 @@ fun HistoryItem(
         ) {
             Surface(
                 modifier = Modifier.size(width = 60.dp, height = 70.dp),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(16.dp),
                 color = dateBoxColor
             ) {
                 Column(
@@ -67,15 +70,13 @@ fun HistoryItem(
                 ) {
                     Text(
                         text = date,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
-                        color = Color.White
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     Text(
                         text = day,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 14.sp,
-                        color = Color.White
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
                     )
                 }
             }
@@ -98,7 +99,7 @@ fun HistoryItem(
                             .padding(vertical = 4.dp)
                             .fillMaxHeight(),
                         thickness = 1.dp,
-                        color = Color.LightGray.copy(alpha = 0.5f)
+                        color = MaterialTheme.colorScheme.outlineVariant
                     )
                     StatColumn(time = checkOut, label = "Check Out")
                     VerticalDivider(
@@ -106,19 +107,19 @@ fun HistoryItem(
                             .padding(vertical = 4.dp)
                             .fillMaxHeight(),
                         thickness = 1.dp,
-                        color = Color.LightGray.copy(alpha = 0.5f)
+                        color = MaterialTheme.colorScheme.outlineVariant
                     )
                     StatColumn(time = totalHrs, label = "Total Hrs")
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
-                HorizontalDivider(color = Color.LightGray.copy(alpha = 0.5f), thickness = 0.5.dp)
-                Spacer(modifier = Modifier.height(8.dp))
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
                     text = location,
-                    fontSize = 10.sp,
-                    color = AppTextGray,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -132,14 +133,13 @@ private fun StatColumn(time: String, label: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = time,
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
-            color = Color.Black
+            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = label,
-            fontSize = 11.sp,
-            color = AppTextGray
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

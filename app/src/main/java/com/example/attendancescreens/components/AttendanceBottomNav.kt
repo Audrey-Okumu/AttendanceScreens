@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +35,8 @@ import com.example.attendancescreens.model.AttendanceNavigationItem
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AttendanceScreensTheme
+
+import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun AttendanceBottomNav(
@@ -47,58 +50,54 @@ fun AttendanceBottomNav(
         modifier = modifier
             .fillMaxWidth()
             .navigationBarsPadding()
-            .padding(10.dp)
-            .clip(RoundedCornerShape(40.dp)),
-        color = AppDarkGreen,
-        contentColor = White
+            .padding(16.dp)
+            .clip(RoundedCornerShape(32.dp)),
+        color = MaterialTheme.colorScheme.primary,
+        shadowElevation = 8.dp
     ) {
 
         NavigationBar(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             containerColor = Color.Transparent,
-            contentColor = White,
-            windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp)
+            windowInsets = WindowInsets(0.dp)
         ) {
-                for (navItem in navItems) {
+            for (navItem in navItems) {
+                val isSelected = navItem == selected
 
-                    val isSelected = navItem == selected
+                NavigationBarItem(
+                    selected = isSelected,
+                    onClick = { onItemSelected(navItem) },
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = MaterialTheme.colorScheme.secondary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f),
+                        selectedIconColor = MaterialTheme.colorScheme.onSecondary,
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    icon = {
+                        Row(
+                            modifier = Modifier.padding(4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = navItem.icon,
+                                contentDescription = navItem.name
+                            )
 
-                    NavigationBarItem(
-                        onClick = {
-                            onItemSelected(navItem)
-                        }, label = { },
-                        colors = NavigationBarItemDefaults.colors(
-                            indicatorColor = AppGoldAccent,
-                            unselectedIconColor = White
-                        ),
-                        icon = {
-                            Row(
-                                modifier = Modifier.padding(4.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Icon(
-                                    imageVector = navItem.icon,
-                                    contentDescription = navItem.name
+                            if (isSelected) {
+                                Text(
+                                    text = navItem.name,
+                                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = Bold),
+                                    color = MaterialTheme.colorScheme.onPrimary
                                 )
-
-                                if (isSelected) {
-                                    Text(
-                                        text = navItem.name,
-                                        fontSize = 12.sp
-                                    )
-                                }
                             }
-                        },
-                        selected = isSelected,
-                        alwaysShowLabel = false
-                    )
-                }
-
+                        }
+                    },
+                    alwaysShowLabel = false
+                )
             }
         }
-
+    }
 }
 
 

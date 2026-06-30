@@ -26,11 +26,13 @@ import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppLightGray
 import com.example.attendancescreens.ui.theme.AppTextGray
 
+import androidx.compose.material3.MaterialTheme
+
 @Composable
 fun ProfileMenuItem(
     icon: ImageVector,
     title: String,
-    titleColor: Color = Color.Black,
+    titleColor: Color = Color.Unspecified,
     showArrow: Boolean = true,
     onClick: () -> Unit = {}
 ) {
@@ -43,15 +45,20 @@ fun ProfileMenuItem(
     ) {
         Box(
             modifier = Modifier
-                .size(40.dp)
-                .background(AppLightGray.copy(alpha = 0.3f), CircleShape),
+                .size(44.dp)
+                .background(
+                    color = if (title == "Logout") MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f)
+                    else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
+                    shape = CircleShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (title == "Logout") Color.Red else AppDarkGreen,
-                modifier = Modifier.size(20.dp)
+                tint = if (title == "Logout") MaterialTheme.colorScheme.error 
+                      else MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(22.dp)
             )
         }
 
@@ -60,16 +67,15 @@ fun ProfileMenuItem(
         Text(
             text = title,
             modifier = Modifier.weight(1f),
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium,
-            color = titleColor
+            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+            color = if (titleColor == Color.Unspecified) MaterialTheme.colorScheme.onSurface else titleColor
         )
 
         if (showArrow) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
-                tint = AppTextGray,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                 modifier = Modifier.size(20.dp)
             )
         }
