@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -65,10 +67,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
         LoginRoute::class
     )
 
-    val showBars =
-        hideBarsRoutes.none { route ->
-            currentDestination?.hasRoute(route) == true
-        }
+    val showTopBar = hideBarsRoutes.none { currentDestination?.hasRoute(it) == true } &&
+            currentDestination?.hasRoute(ProfileRoute::class) != true
+
+    val showBottomBar = hideBarsRoutes.none { currentDestination?.hasRoute(it) == true }
 
     val currentUser = remember { FirebaseAuth.getInstance().currentUser }
     val userName = currentUser?.displayName
@@ -81,14 +83,11 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     val selectedState = remember { mutableStateOf(items[0]) }
     var selected by selectedState
-    Surface(
-        color = MaterialTheme.colorScheme.background
-    ) {
         Scaffold(
             modifier = modifier
                 .fillMaxSize(),
             topBar = {
-                if (showBars) {
+                if (showTopBar) {
                     AttendanceHeader(
                         userName = userName,
                         onProfileClick = {
@@ -100,7 +99,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 }
             },
             bottomBar = {
-                if (showBars) {
+                if (showBottomBar) {
                     AttendanceBottomNav(
                         navItems = items,
                         selected = selected,
@@ -118,11 +117,11 @@ fun MainScreen(modifier: Modifier = Modifier) {
         ) { innerPadding ->
             NavGraph(
                 navController = navController,
-                modifier = Modifier.padding(if (showBars) innerPadding else PaddingValues(0.dp))
+                modifier = Modifier.padding(innerPadding )
             )
         }
     }
-}
+
 
 @Preview(showBackground = true)
 @Composable

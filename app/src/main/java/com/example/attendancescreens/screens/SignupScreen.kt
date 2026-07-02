@@ -76,16 +76,15 @@ fun SignupScreen(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(220.dp)
-                    .clip(RoundedCornerShape(bottomStart = 48.dp, bottomEnd = 48.dp))
+                    .height(160.dp)
+                    .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -126,14 +125,14 @@ fun SignupScreen(
                         Icons.Default.PersonAdd,
                         null,
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.size(64.dp)
+                        modifier = Modifier.size(48.dp)
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "CREATE ACCOUNT",
-                        style = MaterialTheme.typography.headlineMedium.copy(
+                        style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
-                            letterSpacing = 2.sp
+                            letterSpacing = 1.sp
                         ),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -143,27 +142,22 @@ fun SignupScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .weight(1f)
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(
-                    text = "Join Our Platform",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.primary
-                )
-                
-                Text(
-                    text = "Please enter your details to register",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(Modifier.height(32.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Join Our Platform",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
                 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     TextField(fullName, { fullName = it }, "Full Name", Icons.Default.Person)
                     TextField(email, { email = it }, "Email Address", Icons.Default.Email)
@@ -187,8 +181,6 @@ fun SignupScreen(
                     )
                 }
 
-                Spacer(Modifier.height(16.dp))
-
                 Row(
                     Modifier.fillMaxWidth(), 
                     verticalAlignment = Alignment.CenterVertically
@@ -196,59 +188,54 @@ fun SignupScreen(
                     Checkbox(
                         agreeToTerms,
                         { agreeToTerms = it },
+                        modifier = Modifier.size(32.dp),
                         colors = CheckboxDefaults.colors(
                             checkedColor = MaterialTheme.colorScheme.primary,
                             uncheckedColor = MaterialTheme.colorScheme.outline
                         )
                     )
                     Text(
-                        "I agree to the Terms & Conditions",
-                        style = MaterialTheme.typography.bodyMedium,
+                        "I agree to Terms & Conditions",
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 }
-
-                Spacer(Modifier.height(24.dp))
 
                 Button(
                     onClick = { viewModel.signUpWithEmail(fullName, email, password) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(58.dp),
+                        .height(50.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = RoundedCornerShape(14.dp),
                     enabled = agreeToTerms && fullName.isNotBlank() && email.isNotBlank() && password.isNotBlank(),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
                 ) {
                     Text(
                         "SIGN UP",
-                        style = MaterialTheme.typography.titleMedium.copy(
+                        style = MaterialTheme.typography.titleSmall.copy(
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 1.sp
                         )
                     )
                 }
 
-                Spacer(Modifier.height(24.dp))
-
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         "Already have an account? ",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                     )
                     Text(
                         "SIGN IN",
-                        style = MaterialTheme.typography.bodyMedium.copy(
+                        style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp
+                            letterSpacing = 0.5.sp
                         ),
                         color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.clickable(onClick = onLoginClick)
                     )
                 }
-                
-                Spacer(Modifier.height(24.dp))
             }
         }
     }

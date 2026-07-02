@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.Logout
@@ -27,6 +28,8 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -50,6 +54,7 @@ import com.example.attendancescreens.components.StatCard
 import com.example.attendancescreens.ui.theme.AppDarkGreen
 import com.example.attendancescreens.ui.theme.AppGoldAccent
 import com.example.attendancescreens.ui.theme.AppLightGray
+import com.example.attendancescreens.ui.theme.AppMediumGreen
 import com.example.attendancescreens.ui.theme.AppTextGray
 import com.google.firebase.auth.FirebaseAuth
 
@@ -72,72 +77,86 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .padding(bottom = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(280.dp)
+                    .height(180.dp)
             ) {
-                // Background Curve
+                // Background Curve with Gradient
                 Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp),
+                        .height(110.dp),
                     color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp)
-                ) {}
+                    shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        MaterialTheme.colorScheme.primary,
+                                        AppMediumGreen
+                                    )
+                                )
+                            )
+                    )
+                }
 
-                // Profile Image and Info
+                // Profile Image and Info - Positioned to overlap the curve bottom
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .statusBarsPadding()
                         .align(Alignment.BottomCenter),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Surface(
-                        modifier = Modifier.size(120.dp),
+                        modifier = Modifier.size(80.dp),
                         shape = CircleShape,
                         color = MaterialTheme.colorScheme.surface,
-                        shadowElevation = 8.dp,
-                        border = androidx.compose.foundation.BorderStroke(4.dp, MaterialTheme.colorScheme.primaryContainer)
+                        shadowElevation = 6.dp,
+                        border = androidx.compose.foundation.BorderStroke(3.dp, MaterialTheme.colorScheme.primaryContainer)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
                                 imageVector = Icons.Default.Person,
                                 contentDescription = null,
-                                modifier = Modifier.size(70.dp),
+                                modifier = Modifier.size(48.dp),
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
                     
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
                     
                     Text(
                         text = userName,
-                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = Bold),
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = Bold, fontSize = 20.sp),
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     
                     Text(
                         text = "Senior Software Engineer",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             // Stats Section
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 StatCard(
                     modifier = Modifier.weight(1f),
@@ -153,26 +172,26 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             // Menu Section
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.surface,
                 shadowElevation = 2.dp,
                 border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
-                Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                Column(modifier = Modifier.padding(vertical = 4.dp)) {
                     ProfileMenuItem(icon = Icons.Default.Settings, title = "Account Settings")
                     ProfileMenuItem(icon = Icons.Default.Notifications, title = "Notifications")
                     ProfileMenuItem(icon = Icons.Default.Shield, title = "Privacy & Security")
                     ProfileMenuItem(icon = Icons.Default.Info, title = "Help & Support")
                     
                     HorizontalDivider(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                         thickness = 1.dp,
                         color = MaterialTheme.colorScheme.outlineVariant
                     )
@@ -187,7 +206,7 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
                 }
             }
             
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.weight(0.5f))
         }
     }
 }

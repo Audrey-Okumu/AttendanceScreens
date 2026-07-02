@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -76,6 +77,7 @@ fun DashboardScreen(onClick: () -> Unit) {
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
                     modifier = Modifier.size(220.dp)
+                        .clip(CircleShape)
                 ) {}
                 
                 Surface(
@@ -84,6 +86,7 @@ fun DashboardScreen(onClick: () -> Unit) {
                     shadowElevation = 8.dp,
                     modifier = Modifier
                         .size(180.dp)
+                        .clip(CircleShape)
                         .clickable {
                             viewModel.toggleAttendance()
                             onClick()

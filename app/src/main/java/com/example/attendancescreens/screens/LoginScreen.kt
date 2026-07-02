@@ -80,16 +80,15 @@ fun LoginScreenContent(
     ) {
         Column(
             modifier = modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(280.dp)
-                    .clip(RoundedCornerShape(bottomStart = 48.dp, bottomEnd = 48.dp))
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp))
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
@@ -118,15 +117,15 @@ fun LoginScreenContent(
                     Image(
                         painter = painterResource(id = R.drawable.login),
                         contentDescription = null,
-                        modifier = Modifier.size(160.dp),
+                        modifier = Modifier.size(100.dp),
                         contentScale = ContentScale.Fit
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "ATTENDANCE PRO",
-                        style = MaterialTheme.typography.headlineMedium.copy(
+                        style = MaterialTheme.typography.headlineSmall.copy(
                             fontWeight = FontWeight.Bold,
-                            letterSpacing = 2.sp
+                            letterSpacing = 1.sp
                         ),
                         color = MaterialTheme.colorScheme.onPrimary
                     )
@@ -136,27 +135,22 @@ fun LoginScreenContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .weight(1f)
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(
-                    text = "Welcome Back",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.primary
-                )
-                
-                Text(
-                    text = "Log in to your workspace",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                    textAlign = TextAlign.Center
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "Welcome Back",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
 
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     TextField(
                         value = email,
@@ -183,35 +177,31 @@ fun LoginScreenContent(
                         ) {
                             Text(
                                 text = "Forgot Password?",
-                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
                                 color = MaterialTheme.colorScheme.secondary
                             )
                         }
                     }
                 }
 
-                Spacer(Modifier.height(32.dp))
-
                 Button(
                     onClick = { onSignInClick(email, password) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(58.dp),
+                        .height(50.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                    shape = RoundedCornerShape(18.dp),
+                    shape = RoundedCornerShape(14.dp),
                     enabled = email.isNotBlank() && password.isNotBlank(),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
                 ) {
                     Text(
                         text = "SIGN IN",
-                        style = MaterialTheme.typography.titleMedium.copy(
+                        style = MaterialTheme.typography.titleSmall.copy(
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 1.sp
                         )
                     )
                 }
-
-                Spacer(Modifier.height(32.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     HorizontalDivider(
@@ -219,10 +209,10 @@ fun LoginScreenContent(
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
                     )
                     Text(
-                        " OR CONTINUE WITH ",
-                        style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.sp),
+                        " OR ",
+                        style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 8.dp)
                     )
                     HorizontalDivider(
                         Modifier.weight(1f),
@@ -230,15 +220,12 @@ fun LoginScreenContent(
                     )
                 }
 
-                Spacer(Modifier.height(24.dp))
-
-                // Improved Social Login Button
                 OutlinedButton(
                     onClick = onSocialSignInClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(18.dp),
+                        .height(50.dp),
+                    shape = RoundedCornerShape(14.dp),
                     border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)
                 ) {
@@ -249,36 +236,32 @@ fun LoginScreenContent(
                         Image(
                             painter = painterResource(R.drawable.google),
                             contentDescription = null,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(20.dp)
                         )
-                        Spacer(Modifier.width(12.dp))
+                        Spacer(Modifier.width(8.dp))
                         Text(
                             "Google",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
+                            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium)
                         )
                     }
                 }
 
-                Spacer(Modifier.height(48.dp))
-
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         "Don't have an account? ",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                     )
                     Text(
                         "SIGN UP",
-                        style = MaterialTheme.typography.bodyMedium.copy(
+                        style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp
+                            letterSpacing = 0.5.sp
                         ),
                         color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.clickable(onClick = onSignupClick)
                     )
                 }
-                
-                Spacer(Modifier.height(24.dp))
             }
         }
     }

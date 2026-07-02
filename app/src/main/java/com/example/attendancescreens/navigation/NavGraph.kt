@@ -1,5 +1,6 @@
 package com.example.attendancescreens.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -25,7 +26,7 @@ fun NavGraph(
     NavHost(
         navController = navController,
         startDestination = LaunchRoute,
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
         composable<LaunchRoute>{
             LaunchScreen(

@@ -49,17 +49,14 @@ fun AttendanceBottomNav(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .navigationBarsPadding()
-            .padding(16.dp)
             .clip(RoundedCornerShape(32.dp)),
         color = MaterialTheme.colorScheme.primary,
-        shadowElevation = 8.dp
+       shadowElevation = 8.dp
     ) {
 
         NavigationBar(
             modifier = Modifier.fillMaxWidth(),
             containerColor = Color.Transparent,
-            windowInsets = WindowInsets(0.dp)
         ) {
             for (navItem in navItems) {
                 val isSelected = navItem == selected
@@ -75,7 +72,7 @@ fun AttendanceBottomNav(
                     ),
                     icon = {
                         Row(
-                            modifier = Modifier.padding(4.dp),
+                          //  modifier = Modifier.padding(4.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
