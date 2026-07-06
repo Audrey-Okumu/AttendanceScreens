@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     id("com.google.devtools.ksp")
     alias(libs.plugins.google.gms.google.services)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
