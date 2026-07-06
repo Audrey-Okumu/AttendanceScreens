@@ -19,13 +19,13 @@ class AttendanceViewModel(private val repository: AttendanceRepository) : ViewMo
     val history = repository.getAllAttendance()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    fun toggleAttendance() = viewModelScope.launch {
+    fun toggleAttendance(location: String? = null) = viewModelScope.launch {
         val active = repository.getActiveAttendance()
         val now = System.currentTimeMillis()
         val time = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(now))
 
         if (active == null) {
-            repository.checkIn(AttendanceEntity(checkInTime = time, checkInMillis = now))
+            repository.checkIn(AttendanceEntity(checkInTime = time, checkInMillis = now, location = location))
         } else {
             val diff = now - active.checkInMillis
             val duration = "${diff / 3600000}h ${(diff / 60000) % 60}m"

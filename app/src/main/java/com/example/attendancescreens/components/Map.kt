@@ -200,7 +200,7 @@ fun Map(
 
     // Display the map
     Box(modifier = Modifier.fillMaxSize()) {
-        // This marker state survives recomposition and stays in sync with currentLocation
+        // marker state survives recomposition and stays in sync with currentLocation
         val markerState = rememberUpdatedMarkerState(position = currentLocation ?: LatLng(0.0, 0.0))
 
         GoogleMap(

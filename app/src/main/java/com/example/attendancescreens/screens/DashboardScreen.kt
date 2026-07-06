@@ -175,7 +175,7 @@ fun DashboardScreen(onClick: () -> Unit) {
                         enabled = isLocationPermissionGranted,
                         modifier = Modifier.fillMaxWidth(),
                         onSwipe = {
-                            viewModel.toggleAttendance()
+                            viewModel.toggleAttendance(addressText)
                             onClick()
                         }
                     )

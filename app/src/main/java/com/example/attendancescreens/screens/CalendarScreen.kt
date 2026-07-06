@@ -114,7 +114,7 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
                         checkIn = entity.checkInTime,
                         checkOut = entity.checkOutTime ?: "--:--",
                         totalHrs = entity.totalHours ?: "--:--",
-                        location = "Office HQ",
+                        location = entity.location ?: "Location not found",
                         isMainColor = entity.checkOutTime == null
                     )
                 }
