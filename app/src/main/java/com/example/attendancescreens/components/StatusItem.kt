@@ -26,17 +26,17 @@ fun StatusItem(icon: ImageVector, time: String, label: String) {
             imageVector = icon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(20.dp)
         )
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = time,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = Bold),
+            style = MaterialTheme.typography.titleSmall.copy(fontWeight = Bold),
             color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = label,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }

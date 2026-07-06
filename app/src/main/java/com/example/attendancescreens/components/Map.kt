@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -46,7 +48,10 @@ const val TAG = "TEST MAP"
 
 @Suppress("unused")
 @Composable
-fun Map(onAddressUpdate: (String) -> Unit = {}) {
+fun Map(
+    onAddressUpdate: (String) -> Unit = {},
+    onPermissionResult: (Boolean) -> Unit = {}
+) {
     val context = LocalContext.current
 
     //Check if permission is granted
@@ -62,6 +67,11 @@ fun Map(onAddressUpdate: (String) -> Unit = {}) {
                     ) == PackageManager.PERMISSION_GRANTED
         )
     }
+    
+    // Check initial state
+    LaunchedEffect(locationPermissionGranted) {
+        onPermissionResult(locationPermissionGranted)
+    }
 
     //request user permission
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -75,6 +85,7 @@ fun Map(onAddressUpdate: (String) -> Unit = {}) {
             permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
 
         locationPermissionGranted = fineGranted || coarseGranted
+        onPermissionResult(locationPermissionGranted)
     }
 
     LaunchedEffect(Unit) {
@@ -187,28 +198,30 @@ fun Map(onAddressUpdate: (String) -> Unit = {}) {
         }
     }
 
-    // Display the results
-    Column(modifier = Modifier.fillMaxSize()) {
-        if (isLoadingLocation) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-        }
+    // Display the map
+    Box(modifier = Modifier.fillMaxSize()) {
+        // This marker state survives recomposition and stays in sync with currentLocation
+        val markerState = rememberUpdatedMarkerState(position = currentLocation ?: LatLng(0.0, 0.0))
 
-        Box(modifier = Modifier.weight(1f)) {
-            // This marker state survives recomposition and stays in sync with currentLocation
-            val markerState = rememberUpdatedMarkerState(position = currentLocation ?: LatLng(0.0, 0.0))
-
-            GoogleMap(
-                modifier = Modifier.fillMaxSize(),
-                cameraPositionState = cameraPositionState
-            ) {
-                if (currentLocation != null) {
-                    Marker(
-                        state = markerState,
-                        title = "Your Location",
-                        snippet = addressText
-                    )
-                }
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState
+        ) {
+            if (currentLocation != null) {
+                Marker(
+                    state = markerState,
+                    title = "Your Location",
+                    snippet = addressText
+                )
             }
+        }
+        
+        if (isLoadingLocation) {
+            LinearProgressIndicator(
+                modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+            )
         }
     }
 }
