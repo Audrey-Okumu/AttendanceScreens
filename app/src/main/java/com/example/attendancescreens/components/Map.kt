@@ -34,8 +34,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberUpdatedMarkerState
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +46,7 @@ const val TAG = "TEST MAP"
 
 @Suppress("unused")
 @Composable
-fun Map() {
+fun Map(onAddressUpdate: (String) -> Unit = {}) {
     val context = LocalContext.current
 
     //Check if permission is granted
@@ -94,6 +92,11 @@ fun Map() {
     var currentLocation by remember { mutableStateOf<LatLng?>(null) }
     var isLoadingLocation by remember { mutableStateOf(false) }
     var addressText by remember { mutableStateOf("Fetching your location...") }
+    
+    // Notify listener of address changes
+    LaunchedEffect(addressText) {
+        onAddressUpdate(addressText)
+    }
 
     //Provider client
     val fusedLocationClient = remember {
@@ -189,11 +192,6 @@ fun Map() {
         if (isLoadingLocation) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
-        Text(
-            text = addressText,
-            modifier = Modifier.padding(8.dp),
-            style = MaterialTheme.typography.bodyMedium
-        )
 
         Box(modifier = Modifier.weight(1f)) {
             // This marker state survives recomposition and stays in sync with currentLocation

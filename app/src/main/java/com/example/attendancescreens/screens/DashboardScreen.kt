@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.attendancescreens.components.Map
 import com.example.attendancescreens.components.StatusItem
 import com.example.attendancescreens.data.AttendanceDatabase
 import com.example.attendancescreens.data.AttendanceRepository
@@ -41,34 +42,78 @@ fun DashboardScreen(onClick: () -> Unit) {
     val viewModel: AttendanceViewModel = viewModel(factory = AttendanceViewModelFactory(repository))
     
     val active by viewModel.activeAttendance.collectAsState()
-    val locale = LocalConfiguration.current.locales[0]
+    var addressText by remember { mutableStateOf("Fetching your location...") }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(
+    Column(modifier = Modifier.fillMaxSize()) {
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp), 
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .weight(0.55f),
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            Text(
-                text = SimpleDateFormat("HH:mm", locale).format(Date()), 
-                style = MaterialTheme.typography.displayLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            )
-            
-            Text(
-                text = SimpleDateFormat("MMMM dd, yyyy • EEEE", locale).format(Date()), 
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-            )
-            
+            Map(onAddressUpdate = { addressText = it })
+        }
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.45f),
+            color = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+            shadowElevation = 8.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Address
+                Column {
+                    Text(
+                        text = "Location",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = addressText,
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        lineHeight = 20.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 24.dp, horizontal = 12.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        StatusItem(Icons.AutoMirrored.Filled.Login, active?.checkInTime ?: "--:--", "Check In")
+                        VerticalDivider(modifier = Modifier.height(40.dp).width(1.dp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
+                        StatusItem(Icons.AutoMirrored.Filled.Logout, active?.checkOutTime ?: "--:--", "Check Out")
+                        VerticalDivider(modifier = Modifier.height(40.dp).width(1.dp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
+                        StatusItem(Icons.Default.History, active?.totalHours ?: "--:--", "Total Hrs")
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
+
             Spacer(modifier = Modifier.weight(1f))
             
             Box(contentAlignment = Alignment.Center) {
@@ -117,28 +162,8 @@ fun DashboardScreen(onClick: () -> Unit) {
             }
 
             Spacer(modifier = Modifier.weight(1f))
-
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 24.dp, horizontal = 12.dp), 
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    StatusItem(Icons.AutoMirrored.Filled.Login, active?.checkInTime ?: "--:--", "Check In")
-                    VerticalDivider(modifier = Modifier.height(40.dp).width(1.dp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
-                    StatusItem(Icons.AutoMirrored.Filled.Logout, active?.checkOutTime ?: "--:--", "Check Out")
-                    VerticalDivider(modifier = Modifier.height(40.dp).width(1.dp), color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f))
-                    StatusItem(Icons.Default.History, active?.totalHours ?: "--:--", "Total Hrs")
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -146,5 +171,5 @@ fun DashboardScreen(onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 private fun DashboardScreenPrev(){
-    DashboardScreen(onClick = {})
+    DashboardScreen {}
 }
