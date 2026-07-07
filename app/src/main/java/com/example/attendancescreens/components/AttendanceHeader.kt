@@ -28,7 +28,7 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun AttendanceHeader(
     userName: String? = null,
-    onProfileClick: () -> Unit = {},
+    onIconClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val currentUser = remember {
@@ -66,7 +66,7 @@ fun AttendanceHeader(
             Surface(
                 modifier = Modifier
                     .size(44.dp)
-                    .clickable(onClick = onProfileClick),
+                    .clickable(onClick = onIconClick),
                 shape = CircleShape,
                 color = MaterialTheme.colorScheme.primaryContainer
             ) {

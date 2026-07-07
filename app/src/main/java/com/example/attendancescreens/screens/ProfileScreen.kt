@@ -1,5 +1,8 @@
 package com.example.attendancescreens.screens
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,14 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.Email
@@ -28,35 +27,30 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Shield
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import com.example.attendancescreens.components.ProfileAction
 import com.example.attendancescreens.components.ProfileMenuItem
-import com.example.attendancescreens.components.ProfileStatItem
 import com.example.attendancescreens.components.StatCard
-import com.example.attendancescreens.ui.theme.AppDarkGreen
-import com.example.attendancescreens.ui.theme.AppGoldAccent
-import com.example.attendancescreens.ui.theme.AppLightGray
 import com.example.attendancescreens.ui.theme.AppMediumGreen
-import com.example.attendancescreens.ui.theme.AppTextGray
 import com.google.firebase.auth.FirebaseAuth
+import android.net.Uri
 
 @Composable
 fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
@@ -69,6 +63,24 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
     }
     val userName = currentUser?.displayName ?: "User"
     val userEmail = currentUser?.email ?: "user@example.com"
+    var showDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var profileImageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+    val galleryLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickVisualMedia()
+        ) { uri ->
+
+            if (uri != null) {
+                profileImageUri = uri
+            }
+
+        }
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -122,14 +134,22 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
                         color = MaterialTheme.colorScheme.surface,
                         shadowElevation = 6.dp,
                         border = androidx.compose.foundation.BorderStroke(3.dp, MaterialTheme.colorScheme.primaryContainer)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Default.Person,
-                                contentDescription = null,
-                                modifier = Modifier.size(48.dp),
-                                tint = MaterialTheme.colorScheme.primary
+                    ) { if (profileImageUri != null){
+                            AsyncImage(
+                                model = profileImageUri,
+                                contentDescription = "Profile"
                             )
+                        }else {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.Person,
+                                    contentDescription = "profile",
+                                    modifier = Modifier
+                                        .clickable { showDialog = true }
+                                        .size(48.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
                         }
                     }
                     
@@ -209,6 +229,21 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.weight(0.5f))
         }
     }
+
+    ProfileAction(
+        showDialog = showDialog,
+        onDismiss = {
+            showDialog = false
+        },
+        onGalleryClick = {
+            galleryLauncher.launch(
+                PickVisualMediaRequest(
+                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                )
+            )
+        },
+        onCameraClick = {}
+    )
 }
 
 @Preview(showBackground = true)
