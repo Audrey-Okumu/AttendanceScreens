@@ -1,5 +1,6 @@
 package com.example.attendancescreens.screens
 
+import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -80,6 +81,15 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
                 profileImageUri = uri
             }
 
+        }
+
+    val cameraPermissionLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            if (granted) {
+                // We'll launch the camera here later
+            }
         }
 
     Surface(
@@ -242,7 +252,10 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
                 )
             )
         },
-        onCameraClick = {}
+        onCameraClick = {
+            showDialog = false
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
     )
 }
 
