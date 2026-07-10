@@ -40,56 +40,97 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.example.attendancescreens.components.ProfileAction
 import com.example.attendancescreens.components.ProfileMenuItem
 import com.example.attendancescreens.components.StatCard
 import com.example.attendancescreens.ui.theme.AppMediumGreen
+import com.example.attendancescreens.ui.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import android.net.Uri
+import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
+import java.io.File
+
+val TAG: String = "PROFILE SCREEN"
 
 @Composable
-fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
-    val currentUser = remember {
-        try {
-            FirebaseAuth.getInstance().currentUser
-        } catch (_: Exception) {
-            null
-        }
-    }
-    val userName = currentUser?.displayName ?: "User"
-    val userEmail = currentUser?.email ?: "user@example.com"
+fun ProfileScreen(
+    onLogout: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: ProfileViewModel = viewModel()
+) {
+    val context = LocalContext.current
+    val photoUrl by viewModel.photoUrl.collectAsState()
+    val userName by viewModel.userName.collectAsState()
+    val userEmail = remember { FirebaseAuth.getInstance().currentUser?.email ?: "user@example.com" }
+
     var showDialog by remember {
         mutableStateOf(false)
-    }
-
-    var profileImageUri by remember {
-        mutableStateOf<Uri?>(null)
     }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickVisualMedia()
         ) { uri ->
-
             if (uri != null) {
-                profileImageUri = uri
+                viewModel.updateProfilePhoto(uri)
             }
+        }
 
+    val imageFile = remember {
+        File(
+            context.cacheDir,
+            "profile_photo_${System.currentTimeMillis()}.jpg"
+        )
+    }
+
+    val imageUri = remember(imageFile) {
+        FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            imageFile
+        )
+    }
+
+    var cameraImageUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+    val takePictureLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.TakePicture()
+        ) { success ->
+            if (success && cameraImageUri != null) {
+                viewModel.updateProfilePhoto(cameraImageUri!!)
+            }
         }
 
     val cameraPermissionLauncher =
         rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { granted ->
+
             if (granted) {
-                // We'll launch the camera here later
+
+                cameraImageUri = imageUri
+
+                takePictureLauncher.launch(imageUri)
             }
+
         }
 
     Surface(
@@ -139,24 +180,29 @@ fun ProfileScreen(onLogout: () -> Unit, modifier: Modifier = Modifier) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Surface(
-                        modifier = Modifier.size(80.dp),
+                        modifier = Modifier
+                            .clickable { showDialog = true }
+                            .size(80.dp),
                         shape = CircleShape,
                         color = MaterialTheme.colorScheme.surface,
                         shadowElevation = 6.dp,
                         border = androidx.compose.foundation.BorderStroke(3.dp, MaterialTheme.colorScheme.primaryContainer)
-                    ) { if (profileImageUri != null){
+                    ) {
+                        if (photoUrl != null) {
                             AsyncImage(
-                                model = profileImageUri,
-                                contentDescription = "Profile"
+                                model = photoUrl,
+                                contentDescription = "Profile",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop,
+                                error = rememberVectorPainter(Icons.Default.Person),
+                                placeholder = rememberVectorPainter(Icons.Default.Person)
                             )
-                        }else {
+                        } else {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = Icons.Default.Person,
                                     contentDescription = "profile",
-                                    modifier = Modifier
-                                        .clickable { showDialog = true }
-                                        .size(48.dp),
+                                    modifier = Modifier.size(48.dp),
                                     tint = MaterialTheme.colorScheme.primary
                                 )
                             }
