@@ -68,6 +68,32 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun deleteProfilePhoto() {
+        viewModelScope.launch {
+            try {
+                val user = firebaseAuth.currentUser
+                val profileUpdates = UserProfileChangeRequest.Builder()
+                    .setPhotoUri(null)
+                    .build()
+
+                user?.updateProfile(profileUpdates)?.await()
+                user?.reload()?.await()
+
+                // Clean up local storage
+                val filesDir = context.filesDir
+                filesDir.listFiles { _, name -> name.startsWith("profile_picture_") }?.forEach { it.delete() }
+
+                // Update local state flows
+                val updatedUser = firebaseAuth.currentUser
+                _photoUrl.value = updatedUser?.photoUrl
+
+                android.util.Log.d("ProfileViewModel", "Profile photo removed successfully")
+            } catch (e: Exception) {
+                android.util.Log.e("ProfileViewModel", "Error removing profile photo", e)
+            }
+        }
+    }
+
     private fun saveImageToInternalStorage(uri: Uri): Uri? {
         return try {
             val inputStream = context.contentResolver.openInputStream(uri) ?: return null

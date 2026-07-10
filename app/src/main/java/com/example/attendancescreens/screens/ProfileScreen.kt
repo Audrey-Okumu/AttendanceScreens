@@ -301,7 +301,13 @@ fun ProfileScreen(
         onCameraClick = {
             showDialog = false
             cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-        }
+        },
+        onRemoveClick = if (photoUrl != null) {
+            {
+                showDialog = false
+                viewModel.deleteProfilePhoto()
+            }
+        } else null
     )
 }
 

@@ -11,7 +11,8 @@ fun ProfileAction(
     showDialog: Boolean,
     onDismiss: () -> Unit,
     onGalleryClick: () -> Unit,
-    onCameraClick: () -> Unit
+    onCameraClick: () -> Unit,
+    onRemoveClick: (() -> Unit)? = null
 ) {
 
     if (showDialog) {
@@ -36,6 +37,14 @@ fun ProfileAction(
                         onClick = onGalleryClick
                     ) {
                         Text("🖼️ Choose from Gallery")
+                    }
+
+                    if (onRemoveClick != null) {
+                        TextButton(
+                            onClick = onRemoveClick
+                        ) {
+                            Text("🗑️ Remove Photo")
+                        }
                     }
                 }
             },
