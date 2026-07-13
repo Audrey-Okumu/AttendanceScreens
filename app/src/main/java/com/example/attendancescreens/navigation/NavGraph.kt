@@ -16,6 +16,7 @@ import com.example.attendancescreens.screens.LaunchScreen
 import com.example.attendancescreens.screens.LoginScreen
 import com.example.attendancescreens.screens.ProfileScreen
 import com.example.attendancescreens.screens.SignupScreen
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @Composable
@@ -23,9 +24,12 @@ fun NavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val currentUser = remember { FirebaseAuth.getInstance().currentUser }
+    val startDestination = if (currentUser != null) HomeRoute else LaunchRoute
+
     NavHost(
         navController = navController,
-        startDestination = LaunchRoute,
+        startDestination = startDestination,
         modifier = modifier.fillMaxSize()
     ) {
         composable<LaunchRoute>{
