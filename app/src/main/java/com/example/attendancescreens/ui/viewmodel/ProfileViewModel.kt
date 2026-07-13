@@ -26,7 +26,6 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     private val authStateListener = FirebaseAuth.AuthStateListener { auth ->
         val user = auth.currentUser
-        // Just use the URI as is; unique filenames will handle cache-busting
         _photoUrl.value = user?.photoUrl
         _userName.value = user?.displayName ?: "User"
     }
@@ -43,7 +42,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun updateProfilePhoto(uri: Uri) {
         viewModelScope.launch {
             try {
-                // Problem 1 (Persistence): Copy the image to internal storage so it survives app restarts
+                // Copy the image to internal storage so it survives app restarts
                 val permanentUri = saveImageToInternalStorage(uri) ?: return@launch
                 
                 val user = firebaseAuth.currentUser
@@ -56,8 +55,12 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
                 user?.reload()?.await()
 
                 // Update local state flows to trigger immediate UI recomposition
+                // We append a timestamp to the URI as a "cache buster" so Coil knows to reload it
                 val updatedUser = firebaseAuth.currentUser
-                _photoUrl.value = updatedUser?.photoUrl
+                val updatedUri = updatedUser?.photoUrl?.let {
+                    it.buildUpon().appendQueryParameter("t", System.currentTimeMillis().toString()).build()
+                }
+                _photoUrl.value = updatedUri
                 _userName.value = updatedUser?.displayName ?: "User"
 
                 // Log success
