@@ -16,12 +16,14 @@ import com.example.attendancescreens.screens.LaunchScreen
 import com.example.attendancescreens.screens.LoginScreen
 import com.example.attendancescreens.screens.ProfileScreen
 import com.example.attendancescreens.screens.SignupScreen
+import com.example.attendancescreens.ui.viewmodel.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
+    profileViewModel: ProfileViewModel,
     modifier: Modifier = Modifier
 ) {
     val currentUser = remember { FirebaseAuth.getInstance().currentUser }
@@ -69,14 +71,17 @@ fun NavGraph(
             val scope = rememberCoroutineScope()
             val context = LocalContext.current
             val authManager = remember { AuthManager(context) }
-            ProfileScreen(onLogout = {
-                scope.launch {
-                    authManager.signOut()
-                    navController.navigate(LaunchRoute) {
-                        popUpTo(0) { inclusive = true }
+            ProfileScreen(
+                viewModel = profileViewModel,
+                onLogout = {
+                    scope.launch {
+                        authManager.signOut()
+                        navController.navigate(LaunchRoute) {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 }
-            })
+            )
         }
     }
 }

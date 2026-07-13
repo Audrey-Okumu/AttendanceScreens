@@ -118,6 +118,7 @@ fun MainScreen(
         ) { innerPadding ->
             NavGraph(
                 navController = navController,
+                profileViewModel = profileViewModel,
                 modifier = Modifier.padding(innerPadding )
             )
         }
