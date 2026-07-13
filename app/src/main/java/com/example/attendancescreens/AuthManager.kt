@@ -102,4 +102,13 @@ class AuthManager(private val context : Context) {
         firebaseAuth.signOut()
         credentialManager.clearCredentialState(ClearCredentialStateRequest())
     }
+
+    suspend fun sendPasswordResetEmail(email: String): AuthResult {
+        return try {
+            firebaseAuth.sendPasswordResetEmail(email).await()
+            AuthResult() // Success
+        } catch (e: Exception) {
+            AuthResult(errorMessage = e.localizedMessage ?: "Failed to send reset email")
+        }
+    }
 }

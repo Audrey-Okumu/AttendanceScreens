@@ -68,6 +68,22 @@ class SignUpViewModel(private val authManager: AuthManager) : ViewModel() {
         }
     }
 
+    fun resetPassword(email: String) {
+        if (email.isBlank()) {
+            _signupState.value = SignUpState(SignUpStateType.ERROR, errorMessage = "Please enter your email address")
+            return
+        }
+        viewModelScope.launch {
+            _signupState.value = SignUpState(SignUpStateType.LOADING)
+            val result = authManager.sendPasswordResetEmail(email)
+            if (result.errorMessage != null) {
+                _signupState.value = SignUpState(SignUpStateType.ERROR, errorMessage = result.errorMessage)
+            } else {
+                _signupState.value = SignUpState(SignUpStateType.SIGNED_OUT, errorMessage = "Reset email sent! Check your inbox or spam.")
+            }
+        }
+    }
+
     fun clearError() {
         _signupState.value = _signupState.value.copy(stateType = SignUpStateType.SIGNED_OUT, errorMessage = null)
     }

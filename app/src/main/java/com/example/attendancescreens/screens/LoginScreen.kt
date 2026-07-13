@@ -49,8 +49,10 @@ fun LoginScreen(
     LaunchedEffect(loginState.stateType, loginState.errorMessage) {
         if (loginState.stateType == SignUpStateType.SIGNED_IN) {
             onLoginSuccess()
-        } else if (loginState.stateType == SignUpStateType.ERROR) {
-            android.widget.Toast.makeText(context, loginState.errorMessage ?: "Login failed", android.widget.Toast.LENGTH_LONG).show()
+        }
+
+        if (loginState.errorMessage != null) {
+            android.widget.Toast.makeText(context, loginState.errorMessage, android.widget.Toast.LENGTH_LONG).show()
             viewModel.clearError()
         }
     }
@@ -59,7 +61,8 @@ fun LoginScreen(
         modifier = modifier,
         onSignupClick = onSignupClick,
         onSignInClick = { email, password -> viewModel.signInWithEmail(email, password) },
-        onSocialSignInClick = { viewModel.signUp() }
+        onSocialSignInClick = { viewModel.signUp() },
+        onForgotPasswordClick = { email -> viewModel.resetPassword(email) }
     )
 }
 
@@ -68,6 +71,7 @@ fun LoginScreenContent(
     onSignupClick: () -> Unit,
     onSignInClick: (String, String) -> Unit,
     onSocialSignInClick: () -> Unit,
+    onForgotPasswordClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var email by remember { mutableStateOf("") }
@@ -171,7 +175,7 @@ fun LoginScreenContent(
                         )
 
                         TextButton(
-                            onClick = {},
+                            onClick = { onForgotPasswordClick(email) },
                             modifier = Modifier.align(Alignment.End),
                             contentPadding = PaddingValues(0.dp)
                         ) {
@@ -273,6 +277,7 @@ fun LoginScreenPreview() {
     LoginScreenContent(
         onSignupClick = {},
         onSignInClick = { _, _ -> },
-        onSocialSignInClick = {}
+        onSocialSignInClick = {},
+        onForgotPasswordClick = {}
     )
 }
